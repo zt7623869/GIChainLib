@@ -18,20 +18,26 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+北京创世智链信息技术研究所iOS项目核心库
                        DESC
 
-  s.homepage         = 'https://github.com/zt7623869/GIChainLib'
+  s.homepage         = 'http://114.242.31.91:8090/6xniu-app/gichainlib_ios'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'zt7623869' => 'zt7623694@sina.com' }
-  s.source           = { :git => 'https://github.com/zt7623869/GIChainLib.git', :tag => s.version.to_s }
+  s.source           = { :git => 'git@114.242.31.91:6xniu-app/gichainlib_ios.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '8.0'
-
-  s.source_files = 'GIChainLib/Classes/**/*'
+  s.ios.deployment_target = '9.0'
   
+  s.subspec 'TZNetwork' do|net|
+      net.source_files = 'GIChainLib/TZNetwork/*','GIChainLib/GICategory/NSObject+Swizzle.{h,m}'
+      net.dependency 'AFNetworking'
+  end
+      
+  s.subspec 'GICategory' do|cate|
+      cate.source_files = 'GIChainLib/GICategory/*'
+  end
   # s.resource_bundles = {
   #   'GIChainLib' => ['GIChainLib/Assets/*.png']
   # }

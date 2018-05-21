@@ -7,6 +7,8 @@
 //
 
 #import "ZLViewController.h"
+#import "ZLNetworkManager.h"
+
 
 @interface ZLViewController ()
 
@@ -17,7 +19,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    
+    
+    [[ZLNetworkManager createRequestWithMethod:@"GET" url:@"index/indexValue" param:@{} cache:NO delegate:nil] resumeWithSuccess:^(id<TZNetworkResultProtocol> requestResult) {
+        
+    } failure:^(id<TZNetworkResultProtocol> requestResult) {
+        //
+    }];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
