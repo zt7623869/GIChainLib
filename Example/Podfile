@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'GIChainLib_Example' do
+  pod 'GIChainLib', :path => '../'
+
+  target 'GIChainLib_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
