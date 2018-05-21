@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'GIChainLib'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of GIChainLib.'
+  s.summary          = 'GIChainLib是北京创世智链信息技术研究所iOS项目核心库'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,8 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-北京创世智链信息技术研究所iOS项目核心库
+                       GIChainLib是北京创世智链信息技术研究所iOS项目核心库
+                       包含基础的工具类、分类、及网络框架等
                        DESC
 
   s.homepage         = 'http://114.242.31.91:8090/6xniu-app/gichainlib_ios'
