@@ -46,14 +46,13 @@ static TZNetworkManager *_defaultNetworkManager;
 
 - (AFHTTPSessionManager *)sessionManager
 {
-    static dispatch_once_t onceDispathToken;
-        
-    dispatch_once(&onceDispathToken, ^{
+    
+    if (!_sessionManager) {
         
         AFHTTPSessionManager *sessionManager = [AFHTTPSessionManager manager];
         
         [sessionManager.requestSerializer setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
-        sessionManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
+        sessionManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html",@"text/plain", nil];
         
         //是否存储cookies
         [sessionManager.requestSerializer setHTTPShouldHandleCookies:YES];
@@ -63,20 +62,23 @@ static TZNetworkManager *_defaultNetworkManager;
         
         //设置证书模式
         sessionManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
-//        NSString * cerPath = [[NSBundle mainBundle] pathForResource:@"xxx" ofType:@"cer"];
-//        NSData * cerData = [NSData dataWithContentsOfFile:cerPath];
-//        sessionManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate withPinnedCertificates:[[NSSet alloc] initWithObjects:cerData, nil]];
-
+        //        NSString * cerPath = [[NSBundle mainBundle] pathForResource:@"xxx" ofType:@"cer"];
+        //        NSData * cerData = [NSData dataWithContentsOfFile:cerPath];
+        //        sessionManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate withPinnedCertificates:[[NSSet alloc] initWithObjects:cerData, nil]];
+        
         // 客户端是否信任非法证书
         sessionManager.securityPolicy.allowInvalidCertificates = YES;
         // 是否在证书域字段中验证域名
         [sessionManager.securityPolicy setValidatesDomainName:NO];
         
-        self.sessionManager = sessionManager;
-    });
+        [self setupSessionManager:sessionManager];
+        
+        _sessionManager = sessionManager;
+    }
     
     return _sessionManager;
 }
+
 
 //设置请求cookies
 + (NSString *)requestCookies{
@@ -146,14 +148,16 @@ static TZNetworkManager *_defaultNetworkManager;
     }
     
     //创建任务对象
-    TZNetworkTask * networkTask = [[TZNetworkTask alloc] init];
+    TZNetworkTask *networkTask = [self instanceOfNetworkTask];
     networkTask.requestUrl = url;
     networkTask.requestParam = paramDict;
     networkTask.delegate = delegate;
     //创建NSURLSessionDataTask
     networkTask.sessionTask = [sessionManager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         
-        [networkTask requestCompletionHandler:[self checkResponse:responseObject error:error]];
+        id<TZNetworkResultProtocol> result = [self checkResponse:responseObject error:error];
+        
+        [networkTask requestCompletionHandler:result success:[self isRequestSuccess:result.responseCode]];
     }];
     
     return networkTask;
@@ -269,14 +273,24 @@ static TZNetworkManager *_defaultNetworkManager;
 
 #pragma mark - overwrite
 
-+ (BOOL)isRequestSuccess:(NSNumber *)responseCode{
-
-    return responseCode.integerValue == 200;
+- (void)setupSessionManager:(AFHTTPSessionManager *)sessionManager{
+    
+    
 }
 
 + (NSDictionary *)additionalCookies{
     
     return nil;
+}
+
++ (TZNetworkTask *)instanceOfNetworkTask{
+    
+    return [[TZNetworkTask alloc]init];
+}
+
++ (BOOL)isRequestSuccess:(NSNumber *)responseCode{
+
+    return responseCode.integerValue == 200;
 }
 
 + (NSString *)noticeForError:(NSInteger)errorCode{

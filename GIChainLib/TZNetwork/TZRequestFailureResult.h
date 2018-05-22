@@ -15,5 +15,6 @@
 @property (nonatomic, strong)NSError *error;
 @property (nonatomic,strong) NSNumber *responseCode;
 @property (nonatomic,strong) id data;
+@property (nonatomic,assign) BOOL success;
 
 @end

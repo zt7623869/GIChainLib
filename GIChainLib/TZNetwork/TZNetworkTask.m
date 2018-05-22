@@ -71,9 +71,11 @@
 }
 
 //请求完成处理，由TZNetworkManager调用
-- (void)requestCompletionHandler:(id<TZNetworkResultProtocol>)requestResult{
+- (void)requestCompletionHandler:(id<TZNetworkResultProtocol>)requestResult success:(BOOL)success{
     
-    if ([TZNetworkManager isRequestSuccess:requestResult.responseCode]) {
+    requestResult.success = success;
+    
+    if (success) {
         //请求成功执行成功回调
         if (self.success) {
             
@@ -89,9 +91,9 @@
     }
     
     //额外执行扩展回调
-    if (self.extra) {
+    if (self.finish) {
 
-        self.extra(requestResult);
+        self.finish(requestResult);
     }
     
     [self removeFromQueue];
@@ -112,43 +114,43 @@
     return [NSString stringWithFormat:@"%p",self];
 }
 
-- (TZNetworkTask *)resumeWithSuccess:(completionBlock)success failure:(completionBlock)failure extra:(completionBlock)extra{
+- (TZNetworkTask *)success:(completionBlock)success failure:(completionBlock)failure finish:(completionBlock)finish{
     
     self.success = success;
     self.failure = failure;
-    self.extra = extra;
+    self.finish = finish;
     
     return self.resume();
 }
 
-- (TZNetworkTask *)resumeWithSuccess:(completionBlock)success failure:(completionBlock)failure{
+- (TZNetworkTask *)success:(completionBlock)success failure:(completionBlock)failure{
     
-    return [self resumeWithSuccess:success failure:failure extra:nil];
+    return [self success:success failure:failure finish:nil];
 }
 
-- (TZNetworkTask *)resumeWithSuccess:(completionBlock)success extra:(completionBlock)extra{
+- (TZNetworkTask *)success:(completionBlock)success finish:(completionBlock)finish{
     
-    return [self resumeWithSuccess:success failure:nil extra:extra];
+    return [self success:success failure:nil finish:finish];
 }
 
-- (TZNetworkTask *)resumeWithFailure:(completionBlock)failure extra:(completionBlock)extra{
+- (TZNetworkTask *)failure:(completionBlock)failure finish:(completionBlock)finish{
     
-    return [self resumeWithSuccess:nil failure:failure extra:extra];
+    return [self success:nil failure:failure finish:finish];
 }
 
-- (TZNetworkTask *)resumeWithSuccess:(completionBlock)success{
+- (TZNetworkTask *)success:(completionBlock)success{
     
-    return [self resumeWithSuccess:success failure:nil extra:nil];
+    return [self success:success failure:nil finish:nil];
 }
 
-- (TZNetworkTask *)resumeWithFailure:(completionBlock)failure{
+- (TZNetworkTask *)failure:(completionBlock)failure{
     
-    return [self resumeWithSuccess:nil failure:failure extra:nil];
+    return [self success:nil failure:failure finish:nil];
 }
 
-- (TZNetworkTask *)resumeWithExtra:(completionBlock)extra{
+- (TZNetworkTask *)finish:(completionBlock)finish{
     
-    return [self resumeWithSuccess:nil failure:nil extra:extra];
+    return [self success:nil failure:nil finish:finish];
 }
 
 

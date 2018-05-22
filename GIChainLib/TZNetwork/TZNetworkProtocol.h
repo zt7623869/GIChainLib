@@ -29,6 +29,8 @@
 @property (nonatomic,strong) NSNumber *responseCode;
 /** 返回数据 */
 @property (nonatomic,strong) id data;
+/** 是否请求成功 */
+@property (nonatomic,assign) BOOL success;
 
 @end
 

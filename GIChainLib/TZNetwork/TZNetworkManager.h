@@ -70,6 +70,12 @@
 #pragma mark - overwrite
 
 
+/**
+ 子类重写方法，用于设置sessionManager
+
+ @param sessionManager
+ */
+- (void)setupSessionManager:(AFHTTPSessionManager *)sessionManager;
 
 /**
  子类重写方法，用于自定义请求成功code，默认为200

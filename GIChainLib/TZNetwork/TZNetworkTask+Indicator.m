@@ -19,7 +19,7 @@ static char *showIndicatorKey = "showIndicatorKey";
     [self switchMethod:@selector(init) swizzled:@selector(hud_init)];
     [self switchMethod:@selector(resume) swizzled:@selector(hud_resume)];
     [self switchMethod:@selector(failure) swizzled:@selector(hud_failure)];
-    [self switchMethod:@selector(extra) swizzled:@selector(hud_extra)];
+    [self switchMethod:@selector(finish) swizzled:@selector(hud_finish)];
 }
 
 - (instancetype)hud_init{
@@ -89,7 +89,7 @@ static char *showIndicatorKey = "showIndicatorKey";
     };
 }
 
--(completionBlock)hud_extra{
+-(completionBlock)hud_finish{
     
     return ^(id<TZNetworkResultProtocol> requestResult) {
         
@@ -98,9 +98,9 @@ static char *showIndicatorKey = "showIndicatorKey";
             [(id<TZNetworkIndicateDelegate>)self.delegate hideNetWorkIndicator:self];
         }
         
-        if (self.hud_extra) {
+        if (self.hud_finish) {
             
-            self.hud_extra(requestResult);
+            self.hud_finish(requestResult);
         }
     };
 }

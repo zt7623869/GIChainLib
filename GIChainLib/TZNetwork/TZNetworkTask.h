@@ -34,7 +34,7 @@ typedef void(^completionBlock)(id<TZNetworkResultProtocol> requestResult);
 /** 失败回调 */
 @property (nonatomic,copy) completionBlock failure;
 /** 完成扩展回调 */
-@property (nonatomic,copy) completionBlock extra;
+@property (nonatomic,copy) completionBlock finish;
 
 
 /** 发送请求 */
@@ -42,25 +42,25 @@ typedef void(^completionBlock)(id<TZNetworkResultProtocol> requestResult);
 /** 取消请求 */
 - (void)cancel;
 
-/** 设置success,failure,extra */
-- (TZNetworkTask *)resumeWithSuccess:(completionBlock)success failure:(completionBlock)failure extra:(completionBlock)extra;
+/** 设置success,failure,finish */
+- (TZNetworkTask *)success:(completionBlock)success failure:(completionBlock)failure finish:(completionBlock)finish;
 /** 设置success,failure */
-- (TZNetworkTask *)resumeWithSuccess:(completionBlock)success failure:(completionBlock)failure;
-/** 设置success,extra */
-- (TZNetworkTask *)resumeWithSuccess:(completionBlock)success extra:(completionBlock)extra;
-/** 设置failure,extra */
-- (TZNetworkTask *)resumeWithFailure:(completionBlock)failure extra:(completionBlock)extra;
+- (TZNetworkTask *)success:(completionBlock)success failure:(completionBlock)failure;
+/** 设置success,finish */
+- (TZNetworkTask *)success:(completionBlock)success finish:(completionBlock)finish;
+/** 设置failure,finish */
+- (TZNetworkTask *)failure:(completionBlock)failure finish:(completionBlock)finish;
 /** 设置success */
-- (TZNetworkTask *)resumeWithSuccess:(completionBlock)success;
+- (TZNetworkTask *)success:(completionBlock)success;
 /** 设置failure */
-- (TZNetworkTask *)resumeWithFailure:(completionBlock)failure;
-/** 设置extra */
-- (TZNetworkTask *)resumeWithExtra:(completionBlock)extra;
+- (TZNetworkTask *)failure:(completionBlock)failure;
+/** 设置finish */
+- (TZNetworkTask *)finish:(completionBlock)finish;
 
 
 
 /** 请求完成处理，由TZNetworkManager调用 */
-- (void)requestCompletionHandler:(id<TZNetworkResultProtocol>)requestResult;
+- (void)requestCompletionHandler:(id<TZNetworkResultProtocol>)requestResult success:(BOOL)success;
 
 @end
 
