@@ -22,7 +22,6 @@
 
 /**
  创建网络请求
-
  @param method 请求方式 GET/POST
  @param url 请求地址
  @param paramDict 请求参数
@@ -34,7 +33,6 @@
 
 /**
  根据url从queue中取出task
-
  @param url 请求地址
  @return 任务对象
  */
@@ -72,38 +70,39 @@
 
 /**
  子类重写方法，用于设置sessionManager
-
  @param sessionManager
  */
 - (void)setupSessionManager:(AFHTTPSessionManager *)sessionManager;
 
 /**
- 子类重写方法，用于自定义请求成功code，默认为200
-
- @param responseCode 返回结果code
- @return 请求是否成功
- */
-+ (BOOL)isRequestSuccess:(NSNumber *)responseCode;
-
-/**
- 子类重写方法，用于自定义解析方式
-
- @param responseObject 网络请求返回的未解析结果
- @return 解析后的对象，必须遵守TZNetworkResultDelegate协议
- */
-+ (id<TZNetworkResultProtocol>)parseRequestResult:(id)responseObject;
-
-/**
  子类重写方法，用于添加额外cookie
-
  @return cookie键值对
  */
 + (NSDictionary *)additionalCookies;
 
 
 /**
- 子类重写方法，用于自定义错误提示
+ 子类重写方法，定义网络请求任务类型，必须是TZNetworkTask的子类
+ @return TZNetworkTask的子类
+ */
++ (TZNetworkTask *)instanceOfNetworkTask;
 
+/**
+ 子类重写方法，用于定义请求成功code，默认为200
+ @param responseCode 返回结果code
+ @return 请求是否成功
+ */
++ (BOOL)isRequestSuccess:(NSNumber *)responseCode;
+
+/**
+ 子类重写方法，用于定义解析方式
+ @param responseObject 网络请求返回的未解析结果
+ @return 解析后的对象，必须遵守TZNetworkResultDelegate协议
+ */
++ (id<TZNetworkResultProtocol>)parseRequestResult:(id)responseObject;
+
+/**
+ 子类重写方法，用于定义错误提示
  @param errorCode 错误代码 (9999为自定义返回码，在parseRequestResult:方法返回值未遵守TZNetworkResultProtocol协议时抛出)
  @return 错误提示文案
  */
