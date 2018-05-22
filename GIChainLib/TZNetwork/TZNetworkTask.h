@@ -42,6 +42,8 @@ typedef void(^completionBlock)(id<TZNetworkResultProtocol> requestResult);
 /** 取消请求 */
 - (void)cancel;
 
+/** 设置success,failure,extra */
+- (TZNetworkTask *)resumeWithSuccess:(completionBlock)success failure:(completionBlock)failure extra:(completionBlock)extra;
 /** 设置success,failure */
 - (TZNetworkTask *)resumeWithSuccess:(completionBlock)success failure:(completionBlock)failure;
 /** 设置success,extra */
