@@ -269,6 +269,11 @@ static TZNetworkManager *_defaultNetworkManager;
 
 #pragma mark - overwrite
 
++ (BOOL)isRequestSuccess:(NSNumber *)responseCode{
+
+    return responseCode.integerValue == 200;
+}
+
 + (NSDictionary *)additionalCookies{
     
     return nil;

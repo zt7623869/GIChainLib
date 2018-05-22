@@ -69,6 +69,16 @@
 
 #pragma mark - overwrite
 
+
+
+/**
+ 子类重写方法，用于自定义请求成功code，默认为200
+
+ @param responseCode 返回结果code
+ @return 请求是否成功
+ */
++ (BOOL)isRequestSuccess:(NSNumber *)responseCode;
+
 /**
  子类重写方法，用于自定义解析方式
 

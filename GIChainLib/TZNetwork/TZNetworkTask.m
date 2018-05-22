@@ -73,7 +73,7 @@
 //请求完成处理，由TZNetworkManager调用
 - (void)requestCompletionHandler:(id<TZNetworkResultProtocol>)requestResult{
     
-    if (requestResult.responseCode.integerValue == 200) {
+    if ([TZNetworkManager isRequestSuccess:requestResult.responseCode]) {
         //请求成功执行成功回调
         if (self.success) {
             
