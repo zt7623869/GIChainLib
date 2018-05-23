@@ -70,7 +70,7 @@
 
 /**
  子类重写方法，用于设置sessionManager
- @param sessionManager
+ @param sessionManager sessionManager
  */
 - (void)setupSessionManager:(AFHTTPSessionManager *)sessionManager;
 
