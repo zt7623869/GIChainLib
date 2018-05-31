@@ -11,6 +11,7 @@
 #import <objc/runtime.h>
 
 static char *showIndicatorKey = "showIndicatorKey";
+static char *showNoticeKey = "showNoticeKey";
 
 @implementation TZNetworkTask (Indicator)
 
@@ -29,6 +30,7 @@ static char *showIndicatorKey = "showIndicatorKey";
     if (task) {
         
         task.showIndicator = YES;
+        task.showNotice = YES;
     }
     
     return self;
@@ -49,6 +51,25 @@ static char *showIndicatorKey = "showIndicatorKey";
     return ^TZNetworkTask *(BOOL indicator) {
         
         self.showIndicator = indicator;
+        return self;
+    };
+}
+
+-(BOOL)showNotice{
+    
+    return [objc_getAssociatedObject(self, showNoticeKey) boolValue];
+}
+
+-(void)setShowNotice:(BOOL)showNotice{
+    
+    objc_setAssociatedObject(self, showNoticeKey, @(showNotice), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (TZNetworkTask *(^)(BOOL))notice{
+    
+    return ^TZNetworkTask *(BOOL notice) {
+        
+        self.showNotice = notice;
         return self;
     };
 }
@@ -74,7 +95,7 @@ static char *showIndicatorKey = "showIndicatorKey";
     
     return ^(id<TZNetworkResultProtocol> requestResult) {
         
-        if (self.showIndicator) {
+        if (self.showNotice) {
             
             if (self.delegate && [self.delegate conformsToProtocol:@protocol(TZNetworkIndicateDelegate)] && [self.delegate respondsToSelector:@selector(showNetWorkFailureNotice:)]) {
                 

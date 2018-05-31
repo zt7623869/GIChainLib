@@ -14,7 +14,13 @@
 /** 是否显示指示器 */
 @property (nonatomic) BOOL showIndicator;
 
+/** 是否显示错误提示 */
+@property (nonatomic) BOOL showNotice;
+
 /** 设置是否显示指示器 */
 - (TZNetworkTask *(^)(BOOL))indicator;
+
+/** 设置是否显示错误提示 */
+- (TZNetworkTask *(^)(BOOL))notice;
 
 @end
