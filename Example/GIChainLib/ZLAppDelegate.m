@@ -7,11 +7,13 @@
 //
 
 #import "ZLAppDelegate.h"
+#import <GIChainLib/LenthFit.h>
 
 @implementation ZLAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+        
     // Override point for customization after application launch.
     return YES;
 }

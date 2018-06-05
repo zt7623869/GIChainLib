@@ -8,7 +8,8 @@
 
 #import "ZLViewController.h"
 #import "ZLNetworkManager.h"
-
+#import <GIChainLib/GICategory.h>
+#import <GIChainLib/LenthFit.h>
 
 @interface ZLViewController ()
 
@@ -20,12 +21,17 @@
 {
     [super viewDidLoad];
     
+//    CGFloat x = lengthFit(100);
+//    lengthFitReference = iPhone6pScreen;
+//    CGFloat y = lengthFit(100);
+//    NSLog(@"x=%f,y=%f",x,y);
     
-    [[ZLNetworkManager createRequestWithMethod:@"GET" url:@"index/indexValue" param:@{} cache:NO delegate:nil] success:^(id<TZNetworkResultProtocol> requestResult) {
-        
-    } failure:^(id<TZNetworkResultProtocol> requestResult) {
-        //
-    }];
+    
+//    [[ZLNetworkManager createRequestWithMethod:@"GET" url:@"index/indexValue" param:@{} cache:NO delegate:nil] success:^(id<TZNetworkResultProtocol> requestResult) {
+//
+//    } failure:^(id<TZNetworkResultProtocol> requestResult) {
+//
+//    }];
     
     
 }

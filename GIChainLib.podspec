@@ -35,10 +35,15 @@ Pod::Spec.new do |s|
       net.source_files = 'GIChainLib/TZNetwork/*','GIChainLib/GICategory/NSObject+Swizzle.{h,m}'
       net.dependency 'AFNetworking'
   end
-      
+  
   s.subspec 'GICategory' do|cate|
       cate.source_files = 'GIChainLib/GICategory/*'
   end
+  
+  s.subspec 'LengthFit' do|fit|
+      fit.source_files = 'GIChainLib/LengthFit/*'
+  end
+  
   # s.resource_bundles = {
   #   'GIChainLib' => ['GIChainLib/Assets/*.png']
   # }

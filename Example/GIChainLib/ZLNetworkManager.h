@@ -6,8 +6,7 @@
 //  Copyright © 2018年 ChuangShiZhiLian. All rights reserved.
 //
 
-#import "TZNetworkManager.h"
-#import "TZNetworkTask+Indicator.h"
+#import <GIChainLib/TZNetwork.h>
 
 
 @interface ZLNetworkManager : TZNetworkManager
