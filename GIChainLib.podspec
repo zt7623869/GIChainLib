@@ -36,12 +36,16 @@ Pod::Spec.new do |s|
       net.dependency 'AFNetworking'
   end
   
+  s.subspec 'LengthFit' do|fit|
+      fit.source_files = 'GIChainLib/LengthFit/*'
+  end
+  
   s.subspec 'GICategory' do|cate|
       cate.source_files = 'GIChainLib/GICategory/*'
   end
   
-  s.subspec 'LengthFit' do|fit|
-      fit.source_files = 'GIChainLib/LengthFit/*'
+  s.subspec 'GIUtils' do|utils|
+      utils.source_files = 'GIChainLib/GIUtils/*'
   end
   
   # s.resource_bundles = {

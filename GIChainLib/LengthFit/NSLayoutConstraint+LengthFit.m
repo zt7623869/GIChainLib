@@ -10,13 +10,13 @@
 #import <objc/runtime.h>
 #import "LenthFit.h"
 
-static void *useLengthFitKey = &useLengthFitKey;
+static char *useLengthFitKey = "useLengthFitKey";
 
 @implementation NSLayoutConstraint (LengthFit)
 
 - (BOOL)useLengthFit{
     
-    return [objc_getAssociatedObject(self, &useLengthFitKey) boolValue];
+    return [objc_getAssociatedObject(self, useLengthFitKey) boolValue];
 }
 
 - (void)setUseLengthFit:(BOOL)useLengthFit{
@@ -32,7 +32,7 @@ static void *useLengthFitKey = &useLengthFitKey;
     
     }
     
-    objc_setAssociatedObject(self, &useLengthFitKey, @(useLengthFit), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, useLengthFitKey, @(useLengthFit), OBJC_ASSOCIATION_ASSIGN);
 }
 
 

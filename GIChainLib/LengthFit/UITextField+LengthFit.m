@@ -10,13 +10,13 @@
 #import <objc/runtime.h>
 #import "LenthFit.h"
 
-static void *useFontFitKey = &useFontFitKey;
+static char *useFontFitKey = "useFontFitKey";
 
 @implementation UITextField (LengthFit)
 
 - (BOOL)useFontFit{
     
-    return [objc_getAssociatedObject(self, &useFontFitKey) boolValue];
+    return [objc_getAssociatedObject(self, useFontFitKey) boolValue];
 }
 
 -(void)setUseFontFit:(BOOL)useFontFit{
@@ -26,7 +26,7 @@ static void *useFontFitKey = &useFontFitKey;
         self.font = [UIFont fontWithName:self.font.fontName size:fontFit(self.font.pointSize)];
     }
     
-    objc_setAssociatedObject(self, &useFontFitKey, @(useFontFit), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, useFontFitKey, @(useFontFit), OBJC_ASSOCIATION_ASSIGN);
 }
 
 @end
