@@ -32,7 +32,7 @@ static char *useLengthFitKey = "useLengthFitKey";
     
     }
     
-    objc_setAssociatedObject(self, useLengthFitKey, @(useLengthFit), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, useLengthFitKey, @(useLengthFit), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 

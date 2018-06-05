@@ -1,5 +1,5 @@
 //
-//  UIButton+ZLCategory.h
+//  UIButton+Ext.h
 //  ZLExchange
 //
 //  Created by ZT on 2018/3/21.
@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIButton (ZLCategory)
-
-@property (nonatomic) IBInspectable BOOL useFontFit;
+@interface UIButton (Ext)
 
 @property (nonatomic) IBInspectable BOOL enabelity;
 

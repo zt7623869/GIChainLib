@@ -26,7 +26,7 @@ static char *useFontFitKey = "useFontFitKey";
         self.font = [UIFont fontWithName:self.font.fontName size:fontFit(self.font.pointSize)];
     }
     
-    objc_setAssociatedObject(self, useFontFitKey, @(useFontFit), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, useFontFitKey, @(useFontFit), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

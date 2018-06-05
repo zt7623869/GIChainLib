@@ -25,7 +25,7 @@ static char *useFontFitKey = "useFontFitKey";
         self.titleLabel.font = [UIFont fontWithName:self.titleLabel.font.fontName size:fontFit(self.titleLabel.font.pointSize)];
     }
     
-    objc_setAssociatedObject(self, useFontFitKey, @(useFontFit), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, useFontFitKey, @(useFontFit), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

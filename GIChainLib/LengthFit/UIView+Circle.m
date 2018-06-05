@@ -47,7 +47,7 @@ static char *circleKey = "circleKey";
     }
     self.layer.masksToBounds = circle;
     
-    objc_setAssociatedObject(self, circleKey, @(circle), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, circleKey, @(circle), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end
