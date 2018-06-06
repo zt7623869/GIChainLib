@@ -12,6 +12,8 @@
 
 @property (nonatomic) IBInspectable BOOL enabelity;
 
+@property (nonatomic) IBInspectable UIColor *normalColor;
+
 @property (nonatomic) IBInspectable UIColor *disableColor;
 
 -(void)moveImageToRight;

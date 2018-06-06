@@ -12,4 +12,5 @@
 #import "UIView+Ext.h"
 #import "UILabel+Ext.h"
 #import "UITextField+Ext.h"
+#import "UIButton+Ext.h"
 #import "NSNumber+Text.h"

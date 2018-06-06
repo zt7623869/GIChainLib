@@ -11,6 +11,7 @@
 #import <objc/runtime.h>
 
 static char *enabelityKey = "enabelityKey";
+static char *normalColorKey = "normalColorKey";
 static char *disableColorKey = "disableColorKey";
 
 @implementation UIButton (Ext)
@@ -27,9 +28,7 @@ static char *disableColorKey = "disableColorKey";
 
 - (void)setEnabelity:(BOOL)enabelity {
     
-    objc_setAssociatedObject(self, enabelityKey, @(enabelity), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
-    [self setEnabled:self.enabled];
+    objc_setAssociatedObject(self, enabelityKey, @(enabelity), OBJC_ASSOCIATION_RETAIN_NONATOMIC);    
 }
 
 - (void)zl_setEnabled:(BOOL)enabled {
@@ -39,8 +38,9 @@ static char *disableColorKey = "disableColorKey";
     if (self.enabelity) {
 
         UIColor *disColor = self.disableColor ? : self.backgroundColor;
+        UIColor *normColor = self.normalColor ? : self.backgroundColor;
 
-        [self setBackgroundColor:enabled ? self.backgroundColor : disColor];
+        [self setBackgroundColor:enabled ? normColor : disColor];
     }
 }
 
@@ -55,6 +55,19 @@ static char *disableColorKey = "disableColorKey";
 - (UIColor *)disableColor {
     
     return objc_getAssociatedObject(self, disableColorKey);
+}
+
+- (void)setNormalColor:(UIColor *)normalColor {
+    
+    if (normalColor) {
+        
+        objc_setAssociatedObject(self, normalColorKey, normalColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+}
+
+- (UIColor *)normalColor {
+    
+    return objc_getAssociatedObject(self, normalColorKey);
 }
 
 -(void)moveImageToRight{
