@@ -15,12 +15,12 @@ typedef enum : NSUInteger {
 
 @class GITabCollectionView;
 
-@protocol ZLTabCollectionViewDelegate <NSObject>
+@protocol GITabCollectionViewDelegate <NSObject>
 
 /**
  选中tab事件
 
- @param tabCollectionView ZLTabCollectionView对象
+ @param tabCollectionView GITabCollectionView对象
  @param item 选中项目
  @param index 选中index
  */
@@ -35,7 +35,7 @@ typedef enum : NSUInteger {
 @property (nonatomic,strong) NSArray <NSString *>*tabs;
 
 /** 代理 */
-@property (nonatomic,weak) id<ZLTabCollectionViewDelegate> delegate;
+@property (nonatomic,weak) id<GITabCollectionViewDelegate> delegate;
 
 /** tab的排列方式,默认是TabCollectionStyleAlignLeft */
 @property (nonatomic,assign) TabCollectionStyle tabCollectionStyle;

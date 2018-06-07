@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'GIChainLib'
-  s.version          = '0.2.2'
+  s.version          = '0.3.1'
   s.summary          = 'GIChainLib是北京创世智链信息技术研究所iOS项目核心库'
 
 # This description is used to generate tags and improve search results.
@@ -45,8 +45,19 @@ Pod::Spec.new do |s|
   end
   
   s.subspec 'GIUI' do|giui|
-      giui.source_files = 'GIChainLib/GIUI/**/*','GIChainLib/GICategory/UIViewExt.{h,m}','GIChainLib/GICategory/UIView+Ext.{h,m}'
-      giui.dependency 'Masonry'
+      giui.source_files = 'GIChainLib/GIUI/**/*'
+      
+      giui.subspec 'GITabCollectionView' do|tabCollection|
+          tabCollection.source_files = 'GIChainLib/GIUI/GITabCollectionView/*'
+          tabCollection.dependency 'Masonry'
+      end
+      
+      giui.subspec 'GITabControlView' do|tabControl|
+          tabControl.source_files = 'GIChainLib/GIUI/GITabControlView/*','GIChainLib/GICategory/UIViewExt.{h,m}','GIChainLib/GICategory/UIView+Ext.{h,m}'
+          tabControl.dependency 'Masonry'
+          tabControl.dependency 'GITabCollectionView'
+      end
+      
   end
   
   # s.resource_bundles = {

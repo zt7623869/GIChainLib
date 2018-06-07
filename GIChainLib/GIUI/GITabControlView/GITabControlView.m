@@ -15,7 +15,7 @@
 #define CONTAINER_MIDDLE 1
 #define CONTAINER_NEXT 2
 
-@interface GITabControlView()<UIScrollViewDelegate,ZLTabCollectionViewDelegate>
+@interface GITabControlView()<UIScrollViewDelegate,GITabCollectionViewDelegate>
 
 @property (nonatomic,strong) NSMutableArray *contentViews;
 @property (nonatomic,strong) NSMutableArray <UIView *>*containers;
@@ -80,7 +80,7 @@
     }];
 }
 
--(void)setTabs:(NSArray <NSString *>*)tabs content:(Class<ZLTabControlViewDelegate>)contentClass userInfo:(void(^)(id content, NSInteger index, NSString *tab))userInfo{
+-(void)setTabs:(NSArray <NSString *>*)tabs content:(Class<GITabControlViewDelegate>)contentClass userInfo:(void(^)(id content, NSInteger index, NSString *tab))userInfo{
     
     _tabCollectionView.tabs = tabs;
     _contentClass = contentClass;
@@ -308,7 +308,7 @@
     if ([self.contentClass.class isSubclassOfClass:UIViewController.class]) {
         
         Class controllerClass = self.contentClass;
-        UIViewController<ZLTabControlViewDelegate> *controller = [[controllerClass alloc]init];
+        UIViewController<GITabControlViewDelegate> *controller = [[controllerClass alloc]init];
         self.userInfo(controller, index, self.tabs[index]);
         controller.view.frame = CGRectMake(0, 0, self.contentScrollView.width, self.contentScrollView.height);
         contentView = controller;
@@ -316,7 +316,7 @@
     }else if([self.contentClass.class isSubclassOfClass:UIView.class]){
         
         Class viewClass = self.contentClass;
-        UIView<ZLTabControlViewDelegate> *view = [[viewClass alloc]initWithFrame:CGRectMake(0, 0, self.contentScrollView.width, self.contentScrollView.height)];
+        UIView<GITabControlViewDelegate> *view = [[viewClass alloc]initWithFrame:CGRectMake(0, 0, self.contentScrollView.width, self.contentScrollView.height)];
         self.userInfo(view, index, self.tabs[index]);
         contentView = view;
     }
@@ -331,7 +331,7 @@
         return;
     }
     
-    id<ZLTabControlViewDelegate> contentView = self.contentViews[index];
+    id<GITabControlViewDelegate> contentView = self.contentViews[index];
     
     if ([contentView respondsToSelector:@selector(didAppearInTabControlView:)]) {
         
@@ -340,7 +340,7 @@
     
     if (self.lastSelected >= 0) {
         
-        id<ZLTabControlViewDelegate> contentView = self.contentViews[self.lastSelected];
+        id<GITabControlViewDelegate> contentView = self.contentViews[self.lastSelected];
         
         if ([contentView respondsToSelector:@selector(didDisappearInTabControlView:)]) {
             
@@ -350,29 +350,10 @@
     
     self.lastSelected = index;
     
-//
-//    for (int i = 0; i < self.contentViews.count; i++) {
-//
-//        id<ZLTabControlViewDelegate> contentView = self.contentViews[i];
-//
-//        if (i == index) {
-//
-//            if ([contentView respondsToSelector:@selector(didAppearInTabControlView:)]) {
-//
-//                [contentView didAppearInTabControlView:self];
-//            }
-//
-//        }else{
-//
-//            if ([contentView respondsToSelector:@selector(didDisappearInTabControlView:)]) {
-//
-//                [contentView didDisappearInTabControlView:self];
-//            }
-//        }
-//    }
+
 }
 
-#pragma mark - ZLTabCollectionViewDelegate
+#pragma mark - GITabCollectionViewDelegate
 
 -(void)tabCollectionView:(GITabCollectionView *)tabCollectionView didSelectItem:(NSString *)item atIndex:(NSInteger)index{
     

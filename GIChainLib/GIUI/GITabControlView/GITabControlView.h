@@ -11,7 +11,7 @@
 
 @class GITabControlView;
 
-@protocol ZLTabControlViewDelegate <NSObject>
+@protocol GITabControlViewDelegate <NSObject>
 
 @optional
 
@@ -43,7 +43,7 @@
 /** 内容页面类型 */
 @property (nonatomic,strong,readonly) Class contentClass;
 
-/** ZLTabCollectionView */
+/** GITabCollectionView */
 @property (nonatomic,strong,readonly) GITabCollectionView *tabCollectionView;
 
 /** 内容ScrollView */
@@ -68,6 +68,6 @@
  @param contentClass 内容页面类型
  @param userInfo 内容页面自定义设置 content:内容页面对象 index:序号 tab:所属tab
  */
--(void)setTabs:(NSArray <NSString *>*)tabs content:(Class<ZLTabControlViewDelegate>)contentClass userInfo:(void(^)(id content, NSInteger index, NSString *tab))userInfo;
+-(void)setTabs:(NSArray <NSString *>*)tabs content:(Class<GITabControlViewDelegate>)contentClass userInfo:(void(^)(id content, NSInteger index, NSString *tab))userInfo;
 
 @end
