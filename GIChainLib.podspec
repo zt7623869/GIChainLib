@@ -55,7 +55,7 @@ Pod::Spec.new do |s|
       giui.subspec 'GITabControlView' do|tabControl|
           tabControl.source_files = 'GIChainLib/GIUI/GITabControlView/*','GIChainLib/GICategory/UIViewExt.{h,m}','GIChainLib/GICategory/UIView+Ext.{h,m}'
           tabControl.dependency 'Masonry'
-          tabControl.dependency 'GITabCollectionView'
+          tabControl.dependency 'GIChainLib/GIUI/GITabCollectionView'
       end
       
   end
