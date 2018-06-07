@@ -1,6 +1,6 @@
 //
 //  NSNumber+Text.m
-//  ZLExchange
+//  GIChainLib
 //
 //  Created by ZT on 2018/4/8.
 //  Copyright © 2018年 ChuangShiZhiLian. All rights reserved.

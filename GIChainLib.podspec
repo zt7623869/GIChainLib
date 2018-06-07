@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
 
   s.description      = <<-DESC
                        GIChainLib是北京创世智链信息技术研究所iOS项目核心库
-                       包含基础的工具类、分类、及网络框架等
+                       包含基础的工具类、分类、网络框架及界面组件等
                        DESC
 
   s.homepage         = 'http://114.242.31.91:8090/6xniu-app/gichainlib_ios'
@@ -44,8 +44,9 @@ Pod::Spec.new do |s|
       cate.source_files = 'GIChainLib/GICategory/*'
   end
   
-  s.subspec 'GIUtils' do|utils|
-      utils.source_files = 'GIChainLib/GIUtils/*'
+  s.subspec 'GIUI' do|giui|
+      giui.source_files = 'GIChainLib/GIUI/**/*','GIChainLib/GICategory/UIViewExt.{h,m}','GIChainLib/GICategory/UIView+Ext.{h,m}'
+      giui.dependency 'Masonry'
   end
   
   # s.resource_bundles = {
