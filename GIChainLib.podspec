@@ -45,7 +45,7 @@ Pod::Spec.new do |s|
   end
   
   s.subspec 'GIUI' do|giui|
-      giui.source_files = 'GIChainLib/GIUI/**/*'
+      # giui.source_files = 'GIChainLib/GIUI/**/*'
       
       giui.subspec 'GITabCollectionView' do|tabCollection|
           tabCollection.source_files = 'GIChainLib/GIUI/GITabCollectionView/*'
