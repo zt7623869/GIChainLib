@@ -13,35 +13,58 @@
 static char *enabelityKey = "enabelityKey";
 static char *normalColorKey = "normalColorKey";
 static char *disableColorKey = "disableColorKey";
+static char *changeOverKey = "changeOverKey";
 
 @implementation UIButton (Ext)
 
 +(void)load{
     
-    [self switchMethod:@selector(setEnabled:) swizzled:@selector(zl_setEnabled:)];
+    [self switchMethod:@selector(setEnabled:) swizzled:@selector(ext_setEnabled:)];
+    [self switchMethod:@selector(setImage:forState:) swizzled:@selector(ext_setImage:forState:)];
+    [self switchMethod:@selector(setTitle:forState:) swizzled:@selector(ext_setTitle:forState:)];
+}
+
+- (void)ext_setEnabled:(BOOL)enabled {
+    
+    [self ext_setEnabled:enabled];
+    
+    if (self.enabelity) {
+        
+        UIColor *disColor = self.disableColor ? : self.backgroundColor;
+        UIColor *normColor = self.normalColor ? : self.backgroundColor;
+        
+        [self setBackgroundColor:enabled ? normColor : disColor];
+    }
+}
+
+-(void)ext_setImage:(UIImage *)image forState:(UIControlState)state{
+
+    [self ext_setImage:image forState:state];
+    
+    if (self.changeOver) {
+       
+        [self adjustImageToRight];
+    }
+}
+
+-(void)ext_setTitle:(NSString *)title forState:(UIControlState)state{
+    
+    [self ext_setTitle:title forState:state];
+    
+    if (self.changeOver) {
+        
+        [self adjustImageToRight];
+    }
+}
+
+- (void)setEnabelity:(BOOL)enabelity {
+    
+    objc_setAssociatedObject(self, enabelityKey, @(enabelity), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)enabelity {
     
     return [objc_getAssociatedObject(self, enabelityKey) boolValue];
-}
-
-- (void)setEnabelity:(BOOL)enabelity {
-    
-    objc_setAssociatedObject(self, enabelityKey, @(enabelity), OBJC_ASSOCIATION_RETAIN_NONATOMIC);    
-}
-
-- (void)zl_setEnabled:(BOOL)enabled {
-    
-    [self zl_setEnabled:enabled];
-    
-    if (self.enabelity) {
-
-        UIColor *disColor = self.disableColor ? : self.backgroundColor;
-        UIColor *normColor = self.normalColor ? : self.backgroundColor;
-
-        [self setBackgroundColor:enabled ? normColor : disColor];
-    }
 }
 
 - (void)setDisableColor:(UIColor *)disableColor {
@@ -70,10 +93,35 @@ static char *disableColorKey = "disableColorKey";
     return objc_getAssociatedObject(self, normalColorKey);
 }
 
--(void)moveImageToRight{
+-(void)setChangeOver:(BOOL)changeOver{
+    
+    objc_setAssociatedObject(self, changeOverKey, @(changeOver), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    if (changeOver) {
+        
+        [self adjustImageToRight];
+
+    }else{
+        
+        [self resetImageToLeft];
+    }
+}
+
+-(BOOL)changeOver{
+    
+    return [objc_getAssociatedObject(self, changeOverKey) boolValue];
+}
+
+-(void)adjustImageToRight{
     
     [self setTitleEdgeInsets:UIEdgeInsetsMake(0, -self.imageView.image.size.width, 0, self.imageView.image.size.width)];
     [self setImageEdgeInsets:UIEdgeInsetsMake(0, self.titleLabel.bounds.size.width, 0, -self.titleLabel.bounds.size.width)];
+}
+
+-(void)resetImageToLeft{
+    
+    [self setTitleEdgeInsets:UIEdgeInsetsZero];
+    [self setImageEdgeInsets:UIEdgeInsetsZero];
 }
 
 @end

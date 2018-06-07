@@ -16,8 +16,8 @@ static char *edgeInsetsKey = "edgeInsetsKey";
 
 +(void)load{
     
-    [self switchMethod:@selector(textRectForBounds:limitedToNumberOfLines:) swizzled:@selector(zl_textRectForBounds:limitedToNumberOfLines:)];
-    [self switchMethod:@selector(drawTextInRect:) swizzled:@selector(zl_drawTextInRect:)];
+    [self switchMethod:@selector(textRectForBounds:limitedToNumberOfLines:) swizzled:@selector(ext_textRectForBounds:limitedToNumberOfLines:)];
+    [self switchMethod:@selector(drawTextInRect:) swizzled:@selector(ext_drawTextInRect:)];
 }
 
 -(UIEdgeInsets)edgeInsets{
@@ -32,10 +32,10 @@ static char *edgeInsetsKey = "edgeInsetsKey";
     objc_setAssociatedObject(self, &edgeInsetsKey, [NSValue valueWithUIEdgeInsets:edgeInsets], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (CGRect)zl_textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines {
+- (CGRect)ext_textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines {
     
     UIEdgeInsets insets = self.edgeInsets;
-    CGRect rect = [self zl_textRectForBounds:UIEdgeInsetsInsetRect(bounds, insets)
+    CGRect rect = [self ext_textRectForBounds:UIEdgeInsetsInsetRect(bounds, insets)
                     limitedToNumberOfLines:numberOfLines];
     
     rect.origin.x    -= insets.left;
@@ -46,9 +46,9 @@ static char *edgeInsetsKey = "edgeInsetsKey";
     return rect;
 }
 
-- (void)zl_drawTextInRect:(CGRect)rect {
+- (void)ext_drawTextInRect:(CGRect)rect {
     
-    [self zl_drawTextInRect:UIEdgeInsetsInsetRect(rect, self.edgeInsets)];
+    [self ext_drawTextInRect:UIEdgeInsetsInsetRect(rect, self.edgeInsets)];
 }
 
 @end

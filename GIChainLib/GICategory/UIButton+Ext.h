@@ -16,6 +16,9 @@
 
 @property (nonatomic) IBInspectable UIColor *disableColor;
 
--(void)moveImageToRight;
+@property (nonatomic) IBInspectable BOOL changeOver;
+
+-(void)adjustImageToRight;
+-(void)resetImageToLeft;
 
 @end
