@@ -134,7 +134,7 @@
         make.edges.mas_equalTo(UIEdgeInsetsZero);
     }];
     
-    [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass(GITabCollectionViewCell.class) bundle:[NSBundle bundleForClass:[self class]]] forCellWithReuseIdentifier:TAB_COLLECTION_VIEW_CELL];
+    [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass(GITabCollectionViewCell.class) bundle:[NSBundle bundleForClass:GITabCollectionView.class]] forCellWithReuseIdentifier:TAB_COLLECTION_VIEW_CELL];
     
     self.bottomLine = [[UIView alloc]initWithFrame:CGRectZero];
     [self addSubview:self.bottomLine];
