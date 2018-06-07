@@ -22,11 +22,11 @@ Pod::Spec.new do |s|
                        包含基础的工具类、分类、网络框架及界面组件等
                        DESC
 
-  s.homepage         = 'http://114.242.31.91:8090/6xniu-app/gichainlib_ios'
+  s.homepage         = 'http://114.242.31.175:8090/6xniu-app/gichainlib_ios'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'zt7623869' => 'zt7623694@sina.com' }
-  s.source           = { :git => 'http://zhengtong@114.242.31.91:8090/6xniu-app/gichainlib_ios.git', :tag => s.version.to_s }
+  s.source           = { :git => 'http://zhengtong@114.242.31.175:8090/6xniu-app/gichainlib_ios.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'
