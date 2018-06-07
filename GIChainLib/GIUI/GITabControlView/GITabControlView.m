@@ -86,6 +86,20 @@
     _contentClass = contentClass;
     _userInfo = userInfo;
     
+    [self tabSetFinished:tabs];
+}
+
+-(void)setTabs:(NSArray *)tabs display:(NSString *(^)(id tab))display content:(Class<GITabControlViewDelegate>)contentClass userInfo:(void(^)(id content, NSInteger index, NSString *tab))userInfo{
+    
+    [_tabCollectionView tabs:tabs display:display];
+    _contentClass = contentClass;
+    _userInfo = userInfo;
+    
+    [self tabSetFinished:tabs];
+}
+
+- (void)tabSetFinished:(NSArray *)tabs{
+    
     [self.contentScrollView removeAllSubviews];
     
     for (int i = 0; i < tabs.count; i++) {
@@ -117,7 +131,7 @@
         }];
         [self.containers addObject:container];
         
-        [self setContentView:i forContainer:i];        
+        [self setContentView:i forContainer:i];
     }
     
     [self contentViewDidAppear:0];

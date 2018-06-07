@@ -32,7 +32,7 @@ typedef enum : NSUInteger {
 @interface GITabCollectionView : UIView
 
 /** tab数组 */
-@property (nonatomic,strong) NSArray <NSString *>*tabs;
+@property (nonatomic,strong) NSArray *tabs;
 
 /** 代理 */
 @property (nonatomic,weak) id<GITabCollectionViewDelegate> delegate;
@@ -55,6 +55,14 @@ typedef enum : NSUInteger {
 -(instancetype)init UNAVAILABLE_ATTRIBUTE;
 -(instancetype)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout UNAVAILABLE_ATTRIBUTE;
 
+
+/**
+ 设置tab
+
+ @param tabs tab对象数组
+ @param display tab显示设置block
+ */
+-(void)tabs:(NSArray *)tabs display:(NSString *(^)(id tab))display;
 
 /**
  设置选中index

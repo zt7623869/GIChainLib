@@ -20,6 +20,8 @@
 
 @property (nonatomic,strong) UIView *bottomLine;
 
+@property (nonatomic,copy) NSString *(^display)(id tab);
+
 @end
 
 @implementation GITabCollectionView
@@ -58,7 +60,7 @@
     }
 }
 
--(void)setTabs:(NSArray<NSString *> *)tabs{
+-(void)setTabs:(NSArray *)tabs{
     
     _tabs = tabs;
     _selectedIndex = 0;
@@ -74,6 +76,13 @@
         
         [self.delegate tabCollectionView:self didSelectItem:self.tabs.firstObject atIndex:0];
     }
+}
+
+-(void)tabs:(NSArray *)tabs display:(NSString *(^)(id tab))display{
+    
+    self.tabs = tabs;
+    
+    self.display = display;
 }
 
 -(void)setSelectedIndex:(NSInteger)selectedIndex animate:(BOOL)animate{
@@ -134,7 +143,7 @@
         make.edges.mas_equalTo(UIEdgeInsetsZero);
     }];
     
-    [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass(GITabCollectionViewCell.class) bundle:[NSBundle bundleForClass:GITabCollectionView.class]] forCellWithReuseIdentifier:TAB_COLLECTION_VIEW_CELL];
+    [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass(GITabCollectionViewCell.class) bundle:[NSBundle bundleForClass:[self class]]] forCellWithReuseIdentifier:TAB_COLLECTION_VIEW_CELL];
     
     self.bottomLine = [[UIView alloc]initWithFrame:CGRectZero];
     [self addSubview:self.bottomLine];
@@ -160,7 +169,6 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         [self setOffsetForSelectionBar:self.selectedIndex animate:NO];
-        
     });
     
 }
@@ -283,10 +291,19 @@
         cell.titleLabel.numberOfLines = 0;
     }
     
-    NSString *tab = self.tabs[indexPath.row];
+    NSString *tab;
+    id item = self.tabs[indexPath.row];
+    
+    if ([item isKindOfClass:[NSString class]]) {
+        
+        tab = item;
+        
+    }else{
+        
+        tab = self.display(item);
+    }
     
     NSDictionary *attribute;
-    
     
     if (indexPath.row == self.selectedIndex) {
         
