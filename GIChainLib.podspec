@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'GIChainLib'
-  s.version          = '0.3.4'
+  s.version          = '0.3.5'
   s.summary          = 'GIChainLib是北京创世智链信息技术研究所iOS项目核心库'
 
 # This description is used to generate tags and improve search results.
