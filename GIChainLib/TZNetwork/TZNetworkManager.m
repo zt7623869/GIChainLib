@@ -157,7 +157,7 @@ static TZNetworkManager *_defaultNetworkManager;
         
         id<TZNetworkResultProtocol> result = [self checkResponse:responseObject error:error];
         
-        [networkTask requestCompletionHandler:result success:[self isRequestSuccess:result.responseCode]];
+        [networkTask requestCompletionHandler:result success:result.do_success];
     }];
     
     return networkTask;
@@ -180,18 +180,12 @@ static TZNetworkManager *_defaultNetworkManager;
         
         }else{
             
-            requestResult = [[TZRequestFailureResult alloc]init];
-            requestResult.responseCode = @(9999);
-            requestResult.message = [self noticeForError:9999];
-            requestResult.data = result;
+            requestResult = [TZRequestFailureResult failed:@(9999) data:result msg:[self noticeForError:9999] error:nil];
         }
         
     }else{
         //网络错误，将错误封装成请求失败对象
-        requestResult = [[TZRequestFailureResult alloc]init];
-        requestResult.responseCode = @(error.code);
-        requestResult.message = [self noticeForError:error.code];
-        requestResult.error = error;
+        requestResult = [TZRequestFailureResult failed:@(error.code) data:nil msg:[self noticeForError:error.code] error:error];
     }
     
     return requestResult;

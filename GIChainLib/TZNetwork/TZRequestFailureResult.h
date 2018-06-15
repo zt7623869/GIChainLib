@@ -11,6 +11,8 @@
 
 @interface TZRequestFailureResult : NSObject <TZNetworkResultProtocol>
 
++ (TZRequestFailureResult *)failed:(NSNumber *)rCode data:(id)data msg:(NSString *)msg error:(NSError *)error;
+
 @property (nonatomic,copy) NSString *message;
 @property (nonatomic, strong)NSError *error;
 @property (nonatomic,strong) NSNumber *responseCode;

@@ -22,15 +22,19 @@
 @protocol TZNetworkResultProtocol <NSObject>
 
 /** 请求结果信息 */
-@property (nonatomic,copy) NSString *message;
+- (NSString *)do_message;
+
 /** 错误信息 */
-@property (nonatomic, strong)NSError *error;
-/** 请求状态码 */
-@property (nonatomic,strong) NSNumber *responseCode;
+- (NSError *)do_error;
+
+- (NSInteger)do_code;
+
 /** 返回数据 */
-@property (nonatomic,strong) id data;
+- (id)do_result;
+
 /** 是否请求成功 */
-@property (nonatomic,assign) BOOL success;
+- (BOOL)do_success;
+
 
 @end
 
