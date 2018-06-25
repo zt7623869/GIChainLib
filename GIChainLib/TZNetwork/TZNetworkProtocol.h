@@ -13,7 +13,7 @@
 @protocol TZNetworkManagerProtocol <NSObject>
 
 /** 网络请求弱引用队列 */
-@property (nonatomic, strong)NSMapTable *requestQueue;
+@property (nonatomic, strong, readonly)NSMapTable *requestQueue;
 
 @end
 
