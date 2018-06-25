@@ -156,7 +156,7 @@ static TZNetworkManager *_defaultNetworkManager;
         
         BOOL success = NO;
         
-        id<TZNetworkResultProtocol> result = [self parseResponse:response result:responseObject error:error success:&success];
+        id result = [self parseResponse:response result:responseObject error:error success:&success];
         
         [networkTask requestCompletionHandler:result success:NO error:error];
     }];
@@ -255,7 +255,7 @@ static TZNetworkManager *_defaultNetworkManager;
     return [[TZNetworkTask alloc]init];
 }
 
-+ (id<TZNetworkResultProtocol>)parseResponse:(NSURLResponse *)response result:(id)responseObject error:(NSError *)error success:(inout BOOL*)success{
++ (id)parseResponse:(NSURLResponse *)response result:(id)responseObject error:(NSError *)error success:(inout BOOL*)success{
     
     return responseObject;
 }

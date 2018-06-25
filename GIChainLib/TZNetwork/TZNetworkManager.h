@@ -94,7 +94,7 @@
  @param success 自定义请求是否成功，需在实现中判断并重新赋值，inout
  @return 解析后的对象，必须遵守TZNetworkResultDelegate协议
  */
-+ (id<TZNetworkResultProtocol>)parseResponse:(NSURLResponse *)response result:(id)responseObject error:(NSError *)error success:(inout BOOL*)success;
++ (id)parseResponse:(NSURLResponse *)response result:(id)responseObject error:(NSError *)error success:(inout BOOL*)success;
 
 
 @end

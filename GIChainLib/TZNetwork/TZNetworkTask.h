@@ -60,7 +60,7 @@ typedef void(^completionBlock)(id<TZNetworkResultProtocol> requestResult);
 
 
 /** 请求完成处理，由TZNetworkManager调用 */
-- (void)requestCompletionHandler:(id<TZNetworkResultProtocol>)requestResult success:(BOOL)success error:(NSError *)error;
+- (void)requestCompletionHandler:(id)requestResult success:(BOOL)success error:(NSError *)error;
 
 @end
 

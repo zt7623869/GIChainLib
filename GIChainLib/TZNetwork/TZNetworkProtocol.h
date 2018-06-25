@@ -18,7 +18,7 @@
 @end
 
 
-/** 网络请求返回结果格式协议，由返回结果model遵守 */
+/** 网络请求返回结果格式协议，由返回结果model遵守（非必须，仅作为输出协议） */
 @protocol TZNetworkResultProtocol <NSObject>
 
 @optional
