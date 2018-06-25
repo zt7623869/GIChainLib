@@ -21,20 +21,22 @@
 /** 网络请求返回结果格式协议，由返回结果model遵守 */
 @protocol TZNetworkResultProtocol <NSObject>
 
+@optional
+
 /** 请求结果信息 */
 - (NSString *)do_message;
 
+/** 请求结果编码 */
+- (NSInteger)do_code;
+
 /** 错误信息 */
 - (NSError *)do_error;
-
-- (NSInteger)do_code;
 
 /** 返回数据 */
 - (id)do_result;
 
 /** 是否请求成功 */
 - (BOOL)do_success;
-
 
 @end
 

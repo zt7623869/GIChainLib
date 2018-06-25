@@ -71,7 +71,7 @@
 }
 
 //请求完成处理，由TZNetworkManager调用
-- (void)requestCompletionHandler:(id<TZNetworkResultProtocol>)requestResult success:(BOOL)success{
+- (void)requestCompletionHandler:(id<TZNetworkResultProtocol>)requestResult success:(BOOL)success error:(NSError *)error{
         
     if (success) {
         //请求成功执行成功回调
@@ -82,7 +82,7 @@
         
     }else{
         //请求失败，除撤销原因以外，都执行失败回调
-        if (self.failure && requestResult.do_code != -999) {
+        if (self.failure && error.code != -999) {
             
             self.failure(requestResult);
         }

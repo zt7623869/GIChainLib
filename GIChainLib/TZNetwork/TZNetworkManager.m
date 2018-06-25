@@ -7,7 +7,6 @@
 //
 
 #import "TZNetworkManager.h"
-#import "TZRequestFailureResult.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 
 //网络请求超时时间
@@ -155,40 +154,14 @@ static TZNetworkManager *_defaultNetworkManager;
     //创建NSURLSessionDataTask
     networkTask.sessionTask = [sessionManager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         
-        id<TZNetworkResultProtocol> result = [self checkResponse:responseObject error:error];
+        BOOL success = NO;
         
-        [networkTask requestCompletionHandler:result success:result.do_success];
+        id<TZNetworkResultProtocol> result = [self parseResponse:response result:responseObject error:error success:&success];
+        
+        [networkTask requestCompletionHandler:result success:NO error:error];
     }];
     
     return networkTask;
-}
-
-//处理网络请求返回结果
-+ (id<TZNetworkResultProtocol>)checkResponse:(id)responseObject error:(NSError *)error{
-    
-    id<TZNetworkResultProtocol> requestResult;
-    
-    
-    if (!error) {
-        //无网络错误，直接解析
-        id result = [self parseRequestResult:responseObject];
-        
-        //若解析结果未遵守TZNetworkResultProtocol协议，则封装成请求失败对象,返回状态码为9999
-        if ([result conformsToProtocol:@protocol(TZNetworkResultProtocol)]) {
-            
-            requestResult = result;
-        
-        }else{
-            
-            requestResult = [TZRequestFailureResult failed:@(9999) data:result msg:[self noticeForError:9999] error:nil];
-        }
-        
-    }else{
-        //网络错误，将错误封装成请求失败对象
-        requestResult = [TZRequestFailureResult failed:@(error.code) data:nil msg:[self noticeForError:error.code] error:error];
-    }
-    
-    return requestResult;
 }
 
 
@@ -282,17 +255,7 @@ static TZNetworkManager *_defaultNetworkManager;
     return [[TZNetworkTask alloc]init];
 }
 
-+ (BOOL)isRequestSuccess:(NSNumber *)responseCode{
-
-    return responseCode.integerValue == 200;
-}
-
-+ (NSString *)noticeForError:(NSInteger)errorCode{
-    
-    return nil;
-}
-
-+ (id<TZNetworkResultProtocol>)parseRequestResult:(id)responseObject{
++ (id<TZNetworkResultProtocol>)parseResponse:(NSURLResponse *)response result:(id)responseObject error:(NSError *)error success:(inout BOOL*)success{
     
     return responseObject;
 }
