@@ -300,7 +300,10 @@
         
     }else{
         
-        tab = self.display(item);
+        if (self.display) {
+            
+            tab = self.display(item);
+        }
     }
     
     NSDictionary *attribute;
