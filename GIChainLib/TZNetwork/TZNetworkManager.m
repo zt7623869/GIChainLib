@@ -158,7 +158,7 @@ static TZNetworkManager *_defaultNetworkManager;
         
         id result = [self parseResponse:response result:responseObject error:error success:&success];
         
-        [networkTask requestCompletionHandler:result success:NO error:error];
+        [networkTask requestCompletionHandler:result success:success error:error];
     }];
     
     return networkTask;

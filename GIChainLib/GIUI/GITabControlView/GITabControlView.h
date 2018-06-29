@@ -56,34 +56,17 @@
  设置tab数组
 
  @param tabs tab数组
- @param contentClass 内容页面类型
- @param userInfo 内容页面接收的自定义参数
+ @param createContent 内容页面自定义
  */
-
-
-///**
-// 设置tab数组
-//
-// @param tabs tab数组
-// @param contentClass 内容页面类型
-// @param userInfo 内容页面自定义设置 content:内容页面对象 index:序号 tab:所属tab
-// */
-//-(void)setTabs:(NSArray <NSString *>*)tabs content:(Class<GITabControlViewDelegate>)contentClass userInfo:(void(^)(id content, NSInteger index, NSString *tab))userInfo;
-//
-///**
-// 设置tab数组
-//
-// @param tabs tab数组
-// @param display tab显示设置block
-// @param contentClass 内容页面类型
-// @param userInfo 内容页面自定义设置 content:内容页面对象 index:序号 tab:所属tab
-// */
-//-(void)setTabs:(NSArray *)tabs display:(NSString *(^)(id tab))display content:(Class<GITabControlViewDelegate>)contentClass userInfo:(void(^)(id content, NSInteger index, NSString *tab))userInfo;
-
-
 -(void)setTabs:(NSArray <NSString *>*)tabs contents:(UIResponder *(^)(NSInteger index))createContent;
 
--(void)setTabs:(NSArray *)tabs display:(NSString *(^)(id tab))display contents:(UIResponder *(^)(NSInteger index))createContent;
+/**
+ 设置tab数组
 
+ @param tabs tab数组
+ @param display tab显示设置
+ @param createContent 内容页面自定义
+ */
+-(void)setTabs:(NSArray *)tabs display:(NSString *(^)(id tab))display contents:(UIResponder *(^)(NSInteger index))createContent;
 
 @end
