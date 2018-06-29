@@ -20,7 +20,8 @@
 @property (nonatomic,strong) NSMutableArray *contentViews;
 @property (nonatomic,strong) NSMutableArray <UIView *>*containers;
 
-@property (nonatomic,copy) void(^userInfo)(id content, NSInteger index, NSString *tab);
+//@property (nonatomic,copy) void(^userInfo)(id content, NSInteger index, NSString *tab);
+@property (nonatomic,copy) UIResponder *(^createContent)(NSInteger index);
 
 @property (nonatomic,assign) NSInteger lastSelected;
 
@@ -80,20 +81,22 @@
     }];
 }
 
--(void)setTabs:(NSArray <NSString *>*)tabs content:(Class<GITabControlViewDelegate>)contentClass userInfo:(void(^)(id content, NSInteger index, NSString *tab))userInfo{
+-(void)setTabs:(NSArray <NSString *>*)tabs contents:(UIResponder *(^)(NSInteger index))createContent{
     
     _tabCollectionView.tabs = tabs;
-    _contentClass = contentClass;
-    _userInfo = userInfo;
+    _createContent = createContent;
+//    _contentClass = contentClass;
+//    _userInfo = userInfo;
     
     [self tabSetFinished:tabs];
 }
 
--(void)setTabs:(NSArray *)tabs display:(NSString *(^)(id tab))display content:(Class<GITabControlViewDelegate>)contentClass userInfo:(void(^)(id content, NSInteger index, NSString *tab))userInfo{
+-(void)setTabs:(NSArray *)tabs display:(NSString *(^)(id tab))display contents:(UIResponder *(^)(NSInteger index))createContent{
     
     [_tabCollectionView tabs:tabs display:display];
-    _contentClass = contentClass;
-    _userInfo = userInfo;
+    _createContent = createContent;
+//    _contentClass = contentClass;
+//    _userInfo = userInfo;
     
     [self tabSetFinished:tabs];
 }
@@ -317,25 +320,28 @@
 
 -(UIResponder *)createContentView:(NSInteger)index{
     
-    UIResponder *contentView;
+    UIResponder *content = self.createContent(index);
     
-    if ([self.contentClass.class isSubclassOfClass:UIViewController.class]) {
+    if ([content.class isSubclassOfClass:UIViewController.class]) {
         
-        Class controllerClass = self.contentClass;
-        UIViewController<GITabControlViewDelegate> *controller = [[controllerClass alloc]init];
-        self.userInfo(controller, index, self.tabs[index]);
+        UIViewController *controller = (UIViewController *)content;
+        
+//        Class controllerClass = self.contentClass;
+//        UIViewController<GITabControlViewDelegate> *controller = [[controllerClass alloc]init];
+//        self.userInfo(controller, index, self.tabs[index]);
         controller.view.frame = CGRectMake(0, 0, self.contentScrollView.width, self.contentScrollView.height);
-        contentView = controller;
+        content = controller;
         
-    }else if([self.contentClass.class isSubclassOfClass:UIView.class]){
-        
-        Class viewClass = self.contentClass;
-        UIView<GITabControlViewDelegate> *view = [[viewClass alloc]initWithFrame:CGRectMake(0, 0, self.contentScrollView.width, self.contentScrollView.height)];
-        self.userInfo(view, index, self.tabs[index]);
-        contentView = view;
     }
-        
-    return contentView;
+//    else if([content.class isSubclassOfClass:UIView.class]){
+//
+////        Class viewClass = self.contentClass;
+////        UIView<GITabControlViewDelegate> *view = [[viewClass alloc]initWithFrame:CGRectMake(0, 0, self.contentScrollView.width, self.contentScrollView.height)];
+////        self.userInfo(view, index, self.tabs[index]);
+//        content = view;
+//    }
+    
+    return content;
 }
 
 - (void)contentViewDidAppear:(NSInteger)index{
