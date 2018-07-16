@@ -40,9 +40,6 @@
 /** tab数组 */
 @property (nonatomic,strong,readonly) NSArray <NSString *>*tabs;
 
-/** 内容页面类型 */
-//@property (nonatomic,strong,readonly) Class contentClass;
-
 /** GITabCollectionView */
 @property (nonatomic,strong,readonly) GITabCollectionView *tabCollectionView;
 

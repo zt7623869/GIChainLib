@@ -14,12 +14,6 @@
 
 @interface GITabCollectionView () <UICollectionViewDataSource,UICollectionViewDelegate>
 
-@property (nonatomic,strong) UICollectionView *collectionView;
-
-@property (nonatomic,strong) UIView *selectionBar;
-
-@property (nonatomic,strong) UIView *bottomLine;
-
 @property (nonatomic,copy) NSString *(^display)(id tab);
 
 @end
