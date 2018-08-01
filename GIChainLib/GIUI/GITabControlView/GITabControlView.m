@@ -32,9 +32,6 @@
     
     [super awakeFromNib];
     
-    self.contentViews = [NSMutableArray arrayWithCapacity:0];
-    self.containers = [NSMutableArray arrayWithCapacity:0];
-    
     [self setupSubViews];
 }
 
@@ -51,6 +48,9 @@
 }
 
 - (void)setupSubViews{
+    
+    self.contentViews = [NSMutableArray arrayWithCapacity:0];
+    self.containers = [NSMutableArray arrayWithCapacity:0];
     
     self.lastSelected = -1;
     
