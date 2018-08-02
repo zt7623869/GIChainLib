@@ -21,6 +21,8 @@
 
 + (NSString *(^)(id, NSInteger, NSInteger))absoluteDigitFraction;
 
++ (NSNumber *)transDecimal:(id)number;
+
 - (NSString *)decimalString;
 
 - (NSString *)signedDecimalString;

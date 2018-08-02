@@ -7,7 +7,6 @@
 //
 
 #import "NSNumber+Text.h"
-#import "NSDecimalNumber+Ext.h"
 
 @implementation NSNumber (Text)
 
@@ -40,7 +39,7 @@
     
     return ^NSString *(id number, NSInteger minimumFractionDigits, NSInteger maximumFractionDigits) {
         
-        NSDecimalNumber *num = [NSDecimalNumber transDecimal:number];
+        NSNumber *num = [self transDecimal:number];
         
         NSNumberFormatter *numFormat = [[NSNumberFormatter alloc] init];
         numFormat.numberStyle = NSNumberFormatterDecimalStyle;
@@ -67,7 +66,7 @@
     
     return ^NSString *(id number, NSInteger minimumFractionDigits, NSInteger maximumFractionDigits) {
         
-        NSDecimalNumber *num = [NSDecimalNumber transDecimal:number];
+        NSNumber *num = [self transDecimal:number];
         
         NSNumberFormatter *numFormat = [[NSNumberFormatter alloc] init];
         numFormat.numberStyle = NSNumberFormatterDecimalStyle;
@@ -85,7 +84,7 @@
     
     return ^NSString *(id number, NSInteger digit) {
         
-        NSDecimalNumber *num = [NSDecimalNumber transDecimal:number];
+        NSNumber *num = [self transDecimal:number];
         
         NSNumberFormatter *numFormat = [[NSNumberFormatter alloc] init];
         numFormat.numberStyle = NSNumberFormatterDecimalStyle;
@@ -114,6 +113,26 @@
         
         return [numFormat stringFromNumber:[[NSDecimalNumber alloc]initWithDecimal:num.decimalValue]];
     };
+}
+
++ (NSNumber *)transDecimal:(id)number{
+    
+    NSNumber *num;
+    
+    if ([number isKindOfClass:NSNumber.class]) {
+        
+        num = (NSDecimalNumber *)number;
+        
+    }else if([number isKindOfClass:NSString.class]){
+        
+        num = [[NSDecimalNumber alloc] initWithString:(NSString *)number];
+        
+    }else{
+        
+        num = @0;
+    }
+    
+    return num;
 }
 
 - (NSString *)decimalString{
