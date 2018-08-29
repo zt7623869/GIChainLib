@@ -41,12 +41,8 @@
         
         NSNumber *num = [self transDecimal:number];
         
-        NSNumberFormatter *numFormat = [[NSNumberFormatter alloc] init];
-        numFormat.numberStyle = NSNumberFormatterDecimalStyle;
-        numFormat.maximumFractionDigits = maximumFractionDigits;
-        numFormat.minimumFractionDigits = minimumFractionDigits;
-        numFormat.groupingSize = 0;
-        numFormat.roundingMode = NSNumberFormatterRoundFloor;
+        NSNumberFormatter *numFormat = [self significantFormatterWithMin:minimumFractionDigits max:maximumFractionDigits];
+        numFormat.roundingMode = NSNumberFormatterRoundCeiling;
         
         if (num.floatValue < 1 && num.floatValue > -1 && num.floatValue != 0){
             
@@ -68,11 +64,7 @@
         
         NSNumber *num = [self transDecimal:number];
         
-        NSNumberFormatter *numFormat = [[NSNumberFormatter alloc] init];
-        numFormat.numberStyle = NSNumberFormatterDecimalStyle;
-        numFormat.maximumFractionDigits = maximumFractionDigits;
-        numFormat.minimumFractionDigits = minimumFractionDigits;
-        numFormat.groupingSize = 0;
+        NSNumberFormatter *numFormat = [self significantFormatterWithMin:minimumFractionDigits max:maximumFractionDigits];
         numFormat.roundingMode = NSNumberFormatterRoundFloor;
         
         NSString *str = [numFormat stringFromNumber:num];
@@ -159,5 +151,17 @@
         return decimal.stringValue;
     }
 }
+
++ (NSNumberFormatter *)significantFormatterWithMin:(NSInteger)minimumFractionDigits max:(NSInteger)maximumFractionDigits{
+
+    NSNumberFormatter *numFormat = [[NSNumberFormatter alloc] init];
+    numFormat.numberStyle = NSNumberFormatterDecimalStyle;
+    numFormat.maximumFractionDigits = maximumFractionDigits;
+    numFormat.minimumFractionDigits = minimumFractionDigits;
+    numFormat.groupingSize = 0;
+    
+    return numFormat;
+}
+
 
 @end
