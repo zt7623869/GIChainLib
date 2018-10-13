@@ -42,7 +42,7 @@
         NSNumber *num = [self transDecimal:number];
         
         NSNumberFormatter *numFormat = [self significantFormatterWithMin:minimumFractionDigits max:maximumFractionDigits];
-        numFormat.roundingMode = NSNumberFormatterRoundCeiling;
+        numFormat.roundingMode = NSNumberFormatterRoundHalfUp;
         
         if (num.floatValue < 1 && num.floatValue > -1 && num.floatValue != 0){
             
