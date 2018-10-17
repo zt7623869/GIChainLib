@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'GIChainLib'
-  s.version          = '0.3.7'
+  s.version          = '0.3.8'
   s.summary          = 'GIChainLib是北京创世智链信息技术研究所iOS项目核心库'
 
 # This description is used to generate tags and improve search results.
@@ -42,6 +42,14 @@ Pod::Spec.new do |s|
   
   s.subspec 'GICategory' do|cate|
       cate.source_files = 'GIChainLib/GICategory/*'
+  end
+  
+  s.subspec 'GITools' do|tools|
+      
+      tools.subspec 'GITools' do|bioAuthTools|
+          bioAuthTools.source_files = 'GIChainLib/Tools/BioAuthTools/*'
+      end
+      
   end
   
   s.subspec 'GIUI' do|giui|
