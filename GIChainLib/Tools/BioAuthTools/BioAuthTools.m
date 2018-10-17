@@ -76,27 +76,31 @@ static NSString *BioAuthEnable = @"BioAuthEnable";
     
     if (!enable) {
         
-        [self setAppBioAuthEnable:NO];
+        NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:BioAuthEnable];
+        if ([dic isKindOfClass:[NSDictionary class]]) {
+            
+            [dic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [self setAppBioAuth:key enable:NO];
+            }];
+        }
     }
     
     return enable;
 }
 
-+ (BOOL)isAppBioAuthEnable:(NSError * __autoreleasing *)error{
++ (BOOL)isAppBioAuthEnable:(NSString *)userIdentity error:(NSError * __autoreleasing *)error{
     
     if (![self isSystemBioAuthEnable:error]) {
         
         return NO;
     }
     
-    ZLAccountModel *lastest = [ZLSingletonUser lastestAccount];
-
     NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:BioAuthEnable];
     
     BOOL enable;
     if ([dic isKindOfClass:[NSDictionary class]]) {
         
-        enable = [[dic valueForKey:lastest.user.userId] boolValue];
+        enable = [[dic valueForKey:userIdentity] boolValue];
     
     }else{
         
@@ -106,9 +110,8 @@ static NSString *BioAuthEnable = @"BioAuthEnable";
     return enable;
 }
 
-+ (void)setAppBioAuthEnable:(BOOL)enable{
++ (void)setAppBioAuth:(NSString *)userIdentity enable:(BOOL)enable{
     
-    ZLAccountModel *lastest = [ZLSingletonUser account];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:BioAuthEnable];
@@ -120,11 +123,11 @@ static NSString *BioAuthEnable = @"BioAuthEnable";
         newDic = [dic mutableCopy];
     }
     
-    if (!lastest.user.userId.length) {
+    if (!userIdentity.length) {
         return;
     }
     
-    [newDic setValue:@(enable) forKey:lastest.user.userId];
+    [newDic setValue:@(enable) forKey:userIdentity];
     
     [defaults setValue:newDic forKey:BioAuthEnable];
     [defaults synchronize];
@@ -134,6 +137,5 @@ static NSString *BioAuthEnable = @"BioAuthEnable";
     
     return @"需要验证您的身份";
 }
-
 
 @end

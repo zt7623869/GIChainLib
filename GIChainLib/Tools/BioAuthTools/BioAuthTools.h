@@ -53,18 +53,20 @@ typedef NS_ENUM(NSUInteger, eBioAuthType) {
 /**
  是否在App中开启生物验证功能
 
+ @param userIdentity 用户标识
  @param error 错误
  @return 结果
  */
-+ (BOOL)isAppBioAuthEnable:(NSError * __autoreleasing *)error;
++ (BOOL)isAppBioAuthEnable:(NSString *)userIdentity error:(NSError * __autoreleasing *)error;
 
 
 /**
  在App中设置生物验证的开启状态
 
+ @param userIdentity 用户标识
  @param enable 开启状态
  */
-+ (void)setAppBioAuthEnable:(BOOL)enable;
++ (void)setAppBioAuth:(NSString *)userIdentity enable:(BOOL)enable;
 
 
 #pragma mark - overwrite
