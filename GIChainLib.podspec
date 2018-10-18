@@ -49,7 +49,11 @@ Pod::Spec.new do |s|
       tools.subspec 'GITools' do|bioAuthTools|
           bioAuthTools.source_files = 'GIChainLib/Tools/BioAuthTools/*'
       end
-      
+  end
+  
+  s.subspec 'XModel' do|model|
+      model.source_files = 'GIChainLib/XModel/*'
+      model.dependency 'YYModel'
   end
   
   s.subspec 'GIUI' do|giui|
