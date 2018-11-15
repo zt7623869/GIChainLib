@@ -9,9 +9,6 @@
 #import "TZNetworkManager.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 
-//网络请求超时时间
-#define TimeOutInterval 10.0f
-
 static TZNetworkManager *_defaultNetworkManager;
 
 @implementation TZNetworkManager
@@ -22,7 +19,7 @@ static TZNetworkManager *_defaultNetworkManager;
     
     dispatch_once(&onceDispathToken, ^{
         
-        _defaultNetworkManager = [[TZNetworkManager alloc] init];
+        _defaultNetworkManager = [[self alloc] init];
         
     });
     
@@ -48,27 +45,29 @@ static TZNetworkManager *_defaultNetworkManager;
     
     if (!_sessionManager) {
         
-        AFHTTPSessionManager *sessionManager = [AFHTTPSessionManager manager];
+        AFHTTPSessionManager *sessionManager = [self sessionManagerInit];
         
-        [sessionManager.requestSerializer setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
-        sessionManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html",@"text/plain", nil];
-        
-        //是否存储cookies
-        [sessionManager.requestSerializer setHTTPShouldHandleCookies:YES];
-        
-        //超时时间
-        sessionManager.requestSerializer.timeoutInterval = TimeOutInterval;
-        
-        //设置证书模式
-        sessionManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
-        //        NSString * cerPath = [[NSBundle mainBundle] pathForResource:@"xxx" ofType:@"cer"];
-        //        NSData * cerData = [NSData dataWithContentsOfFile:cerPath];
-        //        sessionManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate withPinnedCertificates:[[NSSet alloc] initWithObjects:cerData, nil]];
-        
-        // 客户端是否信任非法证书
-        sessionManager.securityPolicy.allowInvalidCertificates = YES;
-        // 是否在证书域字段中验证域名
-        [sessionManager.securityPolicy setValidatesDomainName:NO];
+        if (!sessionManager) {
+            
+            sessionManager = [AFHTTPSessionManager manager];
+
+            [sessionManager.requestSerializer setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+            sessionManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html",@"text/plain", nil];
+
+            //是否存储cookies
+            [sessionManager.requestSerializer setHTTPShouldHandleCookies:YES];
+
+            //超时时间
+            sessionManager.requestSerializer.timeoutInterval = TimeOutInterval;
+
+            //设置证书模式
+            sessionManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
+
+            // 客户端是否信任非法证书
+            sessionManager.securityPolicy.allowInvalidCertificates = YES;
+            // 是否在证书域字段中验证域名
+            [sessionManager.securityPolicy setValidatesDomainName:NO];
+        }
         
         [self setupSessionManager:sessionManager];
         
@@ -78,6 +77,10 @@ static TZNetworkManager *_defaultNetworkManager;
     return _sessionManager;
 }
 
+- (AFHTTPSessionManager *)sessionManagerInit{
+    
+    return nil;
+}
 
 //设置请求cookies
 + (NSString *)requestCookies{
@@ -127,7 +130,7 @@ static TZNetworkManager *_defaultNetworkManager;
 
 + (TZNetworkTask *)createRequestWithMethod:(NSString *)method url:(NSString *)url param:(NSDictionary *)paramDict cache:(BOOL)needCache delegate:(id<TZNetworkManagerProtocol>)delegate{
     
-    AFHTTPSessionManager *sessionManager = [TZNetworkManager sharedInstance].sessionManager;
+    AFHTTPSessionManager *sessionManager = [self sharedInstance].sessionManager;
     ///配置cookie
     [sessionManager.requestSerializer setValue:[self requestCookies] forHTTPHeaderField:@"Cookie"];
     
@@ -168,9 +171,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //根据url从queue中取出task
 + (TZNetworkTask *)getTaskWithUrl:(NSString *)url{
     
-    for (NSString * key in [[TZNetworkManager sharedInstance].taskQueue allKeys]) {
+    for (NSString * key in [[self sharedInstance].taskQueue allKeys]) {
         
-        TZNetworkTask * task = [[TZNetworkManager sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask * task = [[self sharedInstance].taskQueue objectForKey:key];
         
         if ([task.requestUrl isEqual:url]) {
             
@@ -190,9 +193,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //根据url取消task
 + (void)cancelTaskWithUrl:(NSString *)url
 {
-    for (NSString *key in [[TZNetworkManager sharedInstance].taskQueue allKeys]) {
+    for (NSString *key in [[self sharedInstance].taskQueue allKeys]) {
         
-        TZNetworkTask *task = [[TZNetworkManager sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask *task = [[self sharedInstance].taskQueue objectForKey:key];
         
         if ([task.requestUrl isEqual:url]) {
             
@@ -204,9 +207,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //取消queue中所有的task
 + (void)cancelAllTaskInQueue
 {
-    for (NSString *key in [[TZNetworkManager sharedInstance].taskQueue allKeys]) {
+    for (NSString *key in [[self sharedInstance].taskQueue allKeys]) {
         
-        TZNetworkTask *task = [[TZNetworkManager sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask *task = [[self sharedInstance].taskQueue objectForKey:key];
         
         //如果需要一直保持的请求 需设置keepRequest
         if (!task.keepRequest) {
@@ -219,9 +222,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //是否有未完成的任务
 + (BOOL)hasTaskRunning{
     
-    for (NSString *key in [[TZNetworkManager sharedInstance].taskQueue allKeys]) {
+    for (NSString *key in [[self sharedInstance].taskQueue allKeys]) {
         
-        TZNetworkTask *task = [[TZNetworkManager sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask *task = [[self sharedInstance].taskQueue objectForKey:key];
         
         if (task.state == NSURLSessionTaskStateRunning) {
             

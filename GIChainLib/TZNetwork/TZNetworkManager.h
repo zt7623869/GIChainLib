@@ -10,6 +10,10 @@
 #import "TZNetworkTask.h"
 #import "TZNetworkProtocol.h"
 
+//网络请求超时时间
+#define TimeOutInterval 10.0f
+
+
 /** 网络请求管理类 */
 @interface TZNetworkManager : NSObject
 
@@ -69,9 +73,16 @@
 
 /**
  子类重写方法，用于设置sessionManager
+
+ @return 返回自定义的sessionManager，如不实现则使用默认配置
+ */
+- (AFHTTPSessionManager *)sessionManagerInit;
+
+/**
+ 子类重写方法，用于设置sessionManager
  @param sessionManager sessionManager
  */
-- (void)setupSessionManager:(AFHTTPSessionManager *)sessionManager;
+- (void)setupSessionManager:(AFHTTPSessionManager *)sessionManager __attribute__((deprecated("弃用，请使用sessionManagerInit")));
 
 /**
  子类重写方法，用于添加额外cookie
