@@ -124,6 +124,11 @@
         num = @0;
     }
     
+    if (isnan(num.doubleValue)) {
+        
+        num = @0;
+    }
+    
     return num;
 }
 
