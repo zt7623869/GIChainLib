@@ -52,6 +52,12 @@ typedef enum : NSUInteger {
 /** 当前选中的index */
 @property (nonatomic,assign,readonly) NSInteger selectedIndex;
 
+@property (nonatomic,strong,readonly) UICollectionView *collectionView;
+
+@property (nonatomic,strong,readonly) UIView *selectionBar;
+
+@property (nonatomic,strong,readonly) UIView *bottomLine;
+
 -(instancetype)init UNAVAILABLE_ATTRIBUTE;
 -(instancetype)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout UNAVAILABLE_ATTRIBUTE;
 

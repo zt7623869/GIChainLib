@@ -20,7 +20,6 @@
 @property (nonatomic,strong) NSMutableArray *contentViews;
 @property (nonatomic,strong) NSMutableArray <UIView *>*containers;
 
-//@property (nonatomic,copy) void(^userInfo)(id content, NSInteger index, NSString *tab);
 @property (nonatomic,copy) UIResponder *(^createContent)(NSInteger index);
 
 @property (nonatomic,assign) NSInteger lastSelected;
@@ -32,9 +31,6 @@
 - (void)awakeFromNib{
     
     [super awakeFromNib];
-    
-    self.contentViews = [NSMutableArray arrayWithCapacity:0];
-    self.containers = [NSMutableArray arrayWithCapacity:0];
     
     [self setupSubViews];
 }
@@ -52,6 +48,9 @@
 }
 
 - (void)setupSubViews{
+    
+    self.contentViews = [NSMutableArray arrayWithCapacity:0];
+    self.containers = [NSMutableArray arrayWithCapacity:0];
     
     self.lastSelected = -1;
     
@@ -85,8 +84,6 @@
     
     _tabCollectionView.tabs = tabs;
     _createContent = createContent;
-//    _contentClass = contentClass;
-//    _userInfo = userInfo;
     
     [self tabSetFinished:tabs];
 }
@@ -95,8 +92,6 @@
     
     [_tabCollectionView tabs:tabs display:display];
     _createContent = createContent;
-//    _contentClass = contentClass;
-//    _userInfo = userInfo;
     
     [self tabSetFinished:tabs];
 }
@@ -325,21 +320,11 @@
     if ([content.class isSubclassOfClass:UIViewController.class]) {
         
         UIViewController *controller = (UIViewController *)content;
-        
-//        Class controllerClass = self.contentClass;
-//        UIViewController<GITabControlViewDelegate> *controller = [[controllerClass alloc]init];
-//        self.userInfo(controller, index, self.tabs[index]);
+
         controller.view.frame = CGRectMake(0, 0, self.contentScrollView.width, self.contentScrollView.height);
         content = controller;
         
     }
-//    else if([content.class isSubclassOfClass:UIView.class]){
-//
-////        Class viewClass = self.contentClass;
-////        UIView<GITabControlViewDelegate> *view = [[viewClass alloc]initWithFrame:CGRectMake(0, 0, self.contentScrollView.width, self.contentScrollView.height)];
-////        self.userInfo(view, index, self.tabs[index]);
-//        content = view;
-//    }
     
     return content;
 }

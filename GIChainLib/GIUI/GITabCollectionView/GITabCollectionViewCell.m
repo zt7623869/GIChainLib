@@ -7,6 +7,7 @@
 //
 
 #import "GITabCollectionViewCell.h"
+#import <Masonry/Masonry.h>
 
 @interface GITabCollectionViewCell()
 
@@ -16,7 +17,14 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-
+    
+    if (@available(iOS 12.0, *)) {
+    
+        [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(UIEdgeInsetsZero);
+        }];
+    }
+    
 }
 
 @end

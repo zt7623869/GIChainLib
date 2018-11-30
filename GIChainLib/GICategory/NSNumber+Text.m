@@ -39,28 +39,10 @@
     
     return ^NSString *(id number, NSInteger minimumFractionDigits, NSInteger maximumFractionDigits) {
         
-        NSNumber *num;
+        NSNumber *num = [self transDecimal:number];
         
-        if ([number isKindOfClass:NSNumber.class]) {
-            
-            num = (NSNumber *)number;
-            
-        }else if([number isKindOfClass:NSString.class]){
-            
-            NSDecimalNumber *decimal = [[NSDecimalNumber alloc] initWithString:(NSString *)number];
-            num = decimal;
-            
-        }else{
-            
-            num = @0;
-        }
-        
-        NSNumberFormatter *numFormat = [[NSNumberFormatter alloc] init];
-        numFormat.numberStyle = NSNumberFormatterDecimalStyle;
-        numFormat.maximumFractionDigits = maximumFractionDigits;
-        numFormat.minimumFractionDigits = minimumFractionDigits;
-        numFormat.groupingSize = 0;
-        numFormat.roundingMode = NSNumberFormatterRoundFloor;
+        NSNumberFormatter *numFormat = [self significantFormatterWithMin:minimumFractionDigits max:maximumFractionDigits];
+        numFormat.roundingMode = NSNumberFormatterRoundHalfUp;
         
         if (num.floatValue < 1 && num.floatValue > -1 && num.floatValue != 0){
             
@@ -80,27 +62,9 @@
     
     return ^NSString *(id number, NSInteger minimumFractionDigits, NSInteger maximumFractionDigits) {
         
-        NSNumber *num;
+        NSNumber *num = [self transDecimal:number];
         
-        if ([number isKindOfClass:NSNumber.class]) {
-            
-            num = (NSNumber *)number;
-            
-        }else if([number isKindOfClass:NSString.class]){
-            
-            NSDecimalNumber *decimal = [[NSDecimalNumber alloc] initWithString:(NSString *)number];
-            num = decimal;
-            
-        }else{
-            
-            num = @0;
-        }
-        
-        NSNumberFormatter *numFormat = [[NSNumberFormatter alloc] init];
-        numFormat.numberStyle = NSNumberFormatterDecimalStyle;
-        numFormat.maximumFractionDigits = maximumFractionDigits;
-        numFormat.minimumFractionDigits = minimumFractionDigits;
-        numFormat.groupingSize = 0;
+        NSNumberFormatter *numFormat = [self significantFormatterWithMin:minimumFractionDigits max:maximumFractionDigits];
         numFormat.roundingMode = NSNumberFormatterRoundFloor;
         
         NSString *str = [numFormat stringFromNumber:num];
@@ -112,21 +76,7 @@
     
     return ^NSString *(id number, NSInteger digit) {
         
-        NSNumber *num;
-        
-        if ([number isKindOfClass:NSNumber.class]) {
-            
-            num = (NSNumber *)number;
-            
-        }else if([number isKindOfClass:NSString.class]){
-            
-            NSDecimalNumber *decimal = [[NSDecimalNumber alloc] initWithString:(NSString *)number];
-            num = decimal;
-            
-        }else{
-            
-            num = @0;
-        }
+        NSNumber *num = [self transDecimal:number];
         
         NSNumberFormatter *numFormat = [[NSNumberFormatter alloc] init];
         numFormat.numberStyle = NSNumberFormatterDecimalStyle;
@@ -153,10 +103,39 @@
             numFormat.maximumSignificantDigits = digit;
         }
         
-        return [numFormat stringFromNumber:num];
+        return [numFormat stringFromNumber:[[NSDecimalNumber alloc]initWithDecimal:num.decimalValue]];
     };
 }
 
++ (NSNumber *)transDecimal:(id)number{
+    
+    NSNumber *num;
+    
+    if ([number isKindOfClass:NSNumber.class]) {
+        
+        num = (NSDecimalNumber *)number;
+        
+    }else if([number isKindOfClass:NSString.class]){
+        
+        num = [[NSDecimalNumber alloc] initWithString:(NSString *)number];
+        
+    }else{
+        
+        num = @0;
+    }
+    
+    if ([num isNaN]) {
+        
+        num = @0;
+    }
+    
+    return num;
+}
+
+- (BOOL)isNaN{
+    
+    return isnan(self.doubleValue);
+}
 
 - (NSString *)decimalString{
     
@@ -182,5 +161,17 @@
         return decimal.stringValue;
     }
 }
+
++ (NSNumberFormatter *)significantFormatterWithMin:(NSInteger)minimumFractionDigits max:(NSInteger)maximumFractionDigits{
+
+    NSNumberFormatter *numFormat = [[NSNumberFormatter alloc] init];
+    numFormat.numberStyle = NSNumberFormatterDecimalStyle;
+    numFormat.maximumFractionDigits = maximumFractionDigits;
+    numFormat.minimumFractionDigits = minimumFractionDigits;
+    numFormat.groupingSize = 0;
+    
+    return numFormat;
+}
+
 
 @end

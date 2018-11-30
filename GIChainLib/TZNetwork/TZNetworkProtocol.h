@@ -13,24 +13,30 @@
 @protocol TZNetworkManagerProtocol <NSObject>
 
 /** 网络请求弱引用队列 */
-@property (nonatomic, strong)NSMapTable *requestQueue;
+@property (nonatomic, strong, readonly)NSMapTable *requestQueue;
 
 @end
 
 
-/** 网络请求返回结果格式协议，由返回结果model遵守 */
+/** 网络请求返回结果格式协议，由返回结果model遵守（非必须，仅作为输出协议） */
 @protocol TZNetworkResultProtocol <NSObject>
 
+@optional
+
 /** 请求结果信息 */
-@property (nonatomic,copy) NSString *message;
+- (NSString *)do_message;
+
+/** 请求结果编码 */
+- (NSInteger)do_code;
+
 /** 错误信息 */
-@property (nonatomic, strong)NSError *error;
-/** 请求状态码 */
-@property (nonatomic,strong) NSNumber *responseCode;
+- (NSError *)do_error;
+
 /** 返回数据 */
-@property (nonatomic,strong) id data;
+- (id)do_result;
+
 /** 是否请求成功 */
-@property (nonatomic,assign) BOOL success;
+- (BOOL)do_success;
 
 @end
 

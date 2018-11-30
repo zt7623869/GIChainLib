@@ -7,11 +7,7 @@
 //
 
 #import "TZNetworkManager.h"
-#import "TZRequestFailureResult.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
-
-//网络请求超时时间
-#define TimeOutInterval 10.0f
 
 static TZNetworkManager *_defaultNetworkManager;
 
@@ -23,7 +19,7 @@ static TZNetworkManager *_defaultNetworkManager;
     
     dispatch_once(&onceDispathToken, ^{
         
-        _defaultNetworkManager = [[TZNetworkManager alloc] init];
+        _defaultNetworkManager = [[self alloc] init];
         
     });
     
@@ -49,27 +45,29 @@ static TZNetworkManager *_defaultNetworkManager;
     
     if (!_sessionManager) {
         
-        AFHTTPSessionManager *sessionManager = [AFHTTPSessionManager manager];
+        AFHTTPSessionManager *sessionManager = [self sessionManagerInit];
         
-        [sessionManager.requestSerializer setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
-        sessionManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html",@"text/plain", nil];
-        
-        //是否存储cookies
-        [sessionManager.requestSerializer setHTTPShouldHandleCookies:YES];
-        
-        //超时时间
-        sessionManager.requestSerializer.timeoutInterval = TimeOutInterval;
-        
-        //设置证书模式
-        sessionManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
-        //        NSString * cerPath = [[NSBundle mainBundle] pathForResource:@"xxx" ofType:@"cer"];
-        //        NSData * cerData = [NSData dataWithContentsOfFile:cerPath];
-        //        sessionManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate withPinnedCertificates:[[NSSet alloc] initWithObjects:cerData, nil]];
-        
-        // 客户端是否信任非法证书
-        sessionManager.securityPolicy.allowInvalidCertificates = YES;
-        // 是否在证书域字段中验证域名
-        [sessionManager.securityPolicy setValidatesDomainName:NO];
+        if (!sessionManager) {
+            
+            sessionManager = [AFHTTPSessionManager manager];
+
+            [sessionManager.requestSerializer setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+            sessionManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html",@"text/plain", nil];
+
+            //是否存储cookies
+            [sessionManager.requestSerializer setHTTPShouldHandleCookies:YES];
+
+            //超时时间
+            sessionManager.requestSerializer.timeoutInterval = TimeOutInterval;
+
+            //设置证书模式
+            sessionManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
+
+            // 客户端是否信任非法证书
+            sessionManager.securityPolicy.allowInvalidCertificates = YES;
+            // 是否在证书域字段中验证域名
+            [sessionManager.securityPolicy setValidatesDomainName:NO];
+        }
         
         [self setupSessionManager:sessionManager];
         
@@ -79,6 +77,10 @@ static TZNetworkManager *_defaultNetworkManager;
     return _sessionManager;
 }
 
+- (AFHTTPSessionManager *)sessionManagerInit{
+    
+    return nil;
+}
 
 //设置请求cookies
 + (NSString *)requestCookies{
@@ -128,7 +130,7 @@ static TZNetworkManager *_defaultNetworkManager;
 
 + (TZNetworkTask *)createRequestWithMethod:(NSString *)method url:(NSString *)url param:(NSDictionary *)paramDict cache:(BOOL)needCache delegate:(id<TZNetworkManagerProtocol>)delegate{
     
-    AFHTTPSessionManager *sessionManager = [TZNetworkManager sharedInstance].sessionManager;
+    AFHTTPSessionManager *sessionManager = [self sharedInstance].sessionManager;
     ///配置cookie
     [sessionManager.requestSerializer setValue:[self requestCookies] forHTTPHeaderField:@"Cookie"];
     
@@ -155,55 +157,23 @@ static TZNetworkManager *_defaultNetworkManager;
     //创建NSURLSessionDataTask
     networkTask.sessionTask = [sessionManager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         
-        id<TZNetworkResultProtocol> result = [self checkResponse:responseObject error:error];
+        BOOL success = NO;
         
-        [networkTask requestCompletionHandler:result success:[self isRequestSuccess:result.responseCode]];
+        id result = [self parseResponse:response result:responseObject error:error success:&success];
+        
+        [networkTask requestCompletionHandler:result success:success error:error];
     }];
     
     return networkTask;
-}
-
-//处理网络请求返回结果
-+ (id<TZNetworkResultProtocol>)checkResponse:(id)responseObject error:(NSError *)error{
-    
-    id<TZNetworkResultProtocol> requestResult;
-    
-    
-    if (!error) {
-        //无网络错误，直接解析
-        id result = [self parseRequestResult:responseObject];
-        
-        //若解析结果未遵守TZNetworkResultProtocol协议，则封装成请求失败对象,返回状态码为9999
-        if ([result conformsToProtocol:@protocol(TZNetworkResultProtocol)]) {
-            
-            requestResult = result;
-        
-        }else{
-            
-            requestResult = [[TZRequestFailureResult alloc]init];
-            requestResult.responseCode = @(9999);
-            requestResult.message = [self noticeForError:9999];
-            requestResult.data = result;
-        }
-        
-    }else{
-        //网络错误，将错误封装成请求失败对象
-        requestResult = [[TZRequestFailureResult alloc]init];
-        requestResult.responseCode = @(error.code);
-        requestResult.message = [self noticeForError:error.code];
-        requestResult.error = error;
-    }
-    
-    return requestResult;
 }
 
 
 //根据url从queue中取出task
 + (TZNetworkTask *)getTaskWithUrl:(NSString *)url{
     
-    for (NSString * key in [[TZNetworkManager sharedInstance].taskQueue allKeys]) {
+    for (NSString * key in [[self sharedInstance].taskQueue allKeys]) {
         
-        TZNetworkTask * task = [[TZNetworkManager sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask * task = [[self sharedInstance].taskQueue objectForKey:key];
         
         if ([task.requestUrl isEqual:url]) {
             
@@ -223,9 +193,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //根据url取消task
 + (void)cancelTaskWithUrl:(NSString *)url
 {
-    for (NSString *key in [[TZNetworkManager sharedInstance].taskQueue allKeys]) {
+    for (NSString *key in [[self sharedInstance].taskQueue allKeys]) {
         
-        TZNetworkTask *task = [[TZNetworkManager sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask *task = [[self sharedInstance].taskQueue objectForKey:key];
         
         if ([task.requestUrl isEqual:url]) {
             
@@ -237,9 +207,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //取消queue中所有的task
 + (void)cancelAllTaskInQueue
 {
-    for (NSString *key in [[TZNetworkManager sharedInstance].taskQueue allKeys]) {
+    for (NSString *key in [[self sharedInstance].taskQueue allKeys]) {
         
-        TZNetworkTask *task = [[TZNetworkManager sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask *task = [[self sharedInstance].taskQueue objectForKey:key];
         
         //如果需要一直保持的请求 需设置keepRequest
         if (!task.keepRequest) {
@@ -252,9 +222,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //是否有未完成的任务
 + (BOOL)hasTaskRunning{
     
-    for (NSString *key in [[TZNetworkManager sharedInstance].taskQueue allKeys]) {
+    for (NSString *key in [[self sharedInstance].taskQueue allKeys]) {
         
-        TZNetworkTask *task = [[TZNetworkManager sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask *task = [[self sharedInstance].taskQueue objectForKey:key];
         
         if (task.state == NSURLSessionTaskStateRunning) {
             
@@ -288,17 +258,7 @@ static TZNetworkManager *_defaultNetworkManager;
     return [[TZNetworkTask alloc]init];
 }
 
-+ (BOOL)isRequestSuccess:(NSNumber *)responseCode{
-
-    return responseCode.integerValue == 200;
-}
-
-+ (NSString *)noticeForError:(NSInteger)errorCode{
-    
-    return nil;
-}
-
-+ (id<TZNetworkResultProtocol>)parseRequestResult:(id)responseObject{
++ (id)parseResponse:(NSURLResponse *)response result:(id)responseObject error:(NSError *)error success:(inout BOOL*)success{
     
     return responseObject;
 }

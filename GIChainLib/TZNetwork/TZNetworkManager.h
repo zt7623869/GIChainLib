@@ -10,6 +10,10 @@
 #import "TZNetworkTask.h"
 #import "TZNetworkProtocol.h"
 
+//网络请求超时时间
+#define TimeOutInterval 10.0f
+
+
 /** 网络请求管理类 */
 @interface TZNetworkManager : NSObject
 
@@ -67,12 +71,18 @@
 
 #pragma mark - overwrite
 
+/**
+ 子类重写方法，用于设置sessionManager
+
+ @return 返回自定义的sessionManager，如不实现则使用默认配置
+ */
+- (AFHTTPSessionManager *)sessionManagerInit;
 
 /**
  子类重写方法，用于设置sessionManager
  @param sessionManager sessionManager
  */
-- (void)setupSessionManager:(AFHTTPSessionManager *)sessionManager;
+- (void)setupSessionManager:(AFHTTPSessionManager *)sessionManager __attribute__((deprecated("弃用，请使用sessionManagerInit")));
 
 /**
  子类重写方法，用于添加额外cookie
@@ -88,25 +98,14 @@
 + (TZNetworkTask *)instanceOfNetworkTask;
 
 /**
- 子类重写方法，用于定义请求成功code，默认为200
- @param responseCode 返回结果code
- @return 请求是否成功
- */
-+ (BOOL)isRequestSuccess:(NSNumber *)responseCode;
-
-/**
  子类重写方法，用于定义解析方式
+ @param response 网络请求响应对象
  @param responseObject 网络请求返回的未解析结果
+ @param error 网络请求错误
+ @param success 自定义请求是否成功，需在实现中判断并重新赋值，inout
  @return 解析后的对象，必须遵守TZNetworkResultDelegate协议
  */
-+ (id<TZNetworkResultProtocol>)parseRequestResult:(id)responseObject;
-
-/**
- 子类重写方法，用于定义错误提示
- @param errorCode 错误代码 (9999为自定义返回码，在parseRequestResult:方法返回值未遵守TZNetworkResultProtocol协议时抛出)
- @return 错误提示文案
- */
-+ (NSString *)noticeForError:(NSInteger)errorCode;
++ (id)parseResponse:(NSURLResponse *)response result:(id)responseObject error:(NSError *)error success:(inout BOOL*)success;
 
 
 @end

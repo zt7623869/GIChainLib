@@ -14,12 +14,6 @@
 
 @interface GITabCollectionView () <UICollectionViewDataSource,UICollectionViewDelegate>
 
-@property (nonatomic,strong) UICollectionView *collectionView;
-
-@property (nonatomic,strong) UIView *selectionBar;
-
-@property (nonatomic,strong) UIView *bottomLine;
-
 @property (nonatomic,copy) NSString *(^display)(id tab);
 
 @end
@@ -63,7 +57,7 @@
 -(void)setTabs:(NSArray *)tabs{
     
     _tabs = tabs;
-    _selectedIndex = 0;
+    self.selectedIndex = 0;
     
     [self.collectionView reloadData];
     
@@ -85,6 +79,11 @@
     self.display = display;
 }
 
+-(void)setSelectedIndex:(NSInteger)selectedIndex{
+    
+    _selectedIndex = selectedIndex;
+}
+
 -(void)setSelectedIndex:(NSInteger)selectedIndex animate:(BOOL)animate{
     
     if (self.tabs.count == 0) {
@@ -92,7 +91,7 @@
         return;
     }
     
-    _selectedIndex = selectedIndex;
+    self.selectedIndex = selectedIndex;
     
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
     
@@ -100,7 +99,7 @@
     [self.collectionView reloadData];
 }
 
--(void)setSelectedIndex:(NSInteger)selectedIndex{
+-(void)resetSelectedIndex:(NSInteger)selectedIndex{
     
     if (self.tabs.count == 0) {
         
@@ -117,7 +116,7 @@
         [self.delegate tabCollectionView:self didSelectItem:self.tabs[selectedIndex] atIndex:selectedIndex];
     }
     
-    _selectedIndex = selectedIndex;
+    self.selectedIndex = selectedIndex;
 }
 
 - (void)setupSubViews{
@@ -130,7 +129,7 @@
     tabFlowLayout.minimumLineSpacing = 0;
     tabFlowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
-    self.collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:tabFlowLayout];
+    _collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:tabFlowLayout];
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
@@ -145,7 +144,17 @@
     
     [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass(GITabCollectionViewCell.class) bundle:[NSBundle bundleForClass:[GITabCollectionView class]]] forCellWithReuseIdentifier:TAB_COLLECTION_VIEW_CELL];
     
-    self.bottomLine = [[UIView alloc]initWithFrame:CGRectZero];
+    _selectionBar = [[UIView alloc]initWithFrame:CGRectZero];
+    self.selectionBar.backgroundColor = self.selectedColor ? self.selectedColor : [UIColor whiteColor];
+    [self addSubview:self.selectionBar];
+    
+    [self.selectionBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+        make.bottom.mas_equalTo(0);
+        make.height.mas_equalTo(3);
+    }];
+    
+    _bottomLine = [[UIView alloc]initWithFrame:CGRectZero];
     [self addSubview:self.bottomLine];
 
     [self.bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -177,7 +186,7 @@
     
     _selectedAttribute = selectedAttribute;
     
-    _selectionBar.backgroundColor = [self selectedColor];
+    self.selectionBar.backgroundColor = [self selectedColor];
     
     if (self.tabs.count > 0) {
         
@@ -221,24 +230,6 @@
     }
     
     return nil;
-}
-
--(UIView *)selectionBar{
-    
-    if (!_selectionBar) {
-        
-        _selectionBar = [[UIView alloc]initWithFrame:CGRectZero];
-        _selectionBar.backgroundColor = self.selectedColor ? self.selectedColor : [UIColor whiteColor];
-        [self addSubview:_selectionBar];
-        
-        [self.selectionBar mas_makeConstraints:^(MASConstraintMaker *make) {
-            
-            make.bottom.mas_equalTo(0);
-            make.height.mas_equalTo(2);
-        }];
-    }
-    
-    return _selectionBar;
 }
 
 -(void)setOffsetForSelectionBar:(NSInteger)index animate:(BOOL)animate{
@@ -334,7 +325,7 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    self.selectedIndex = indexPath.row;
+    [self resetSelectedIndex:indexPath.row];
 }
 
 #pragma mark - UIScrollViewDelegate
