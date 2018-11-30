@@ -124,12 +124,17 @@
         num = @0;
     }
     
-    if (isnan(num.doubleValue)) {
+    if ([num isNaN]) {
         
         num = @0;
     }
     
     return num;
+}
+
+- (BOOL)isNaN{
+    
+    return isnan(self.doubleValue);
 }
 
 - (NSString *)decimalString{
