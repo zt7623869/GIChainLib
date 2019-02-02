@@ -13,7 +13,7 @@ static TZNetworkManager *_defaultNetworkManager;
 
 @implementation TZNetworkManager
 
-+ (TZNetworkManager *)sharedInstance
++ (instancetype)sharedInstance
 {
     static dispatch_once_t onceDispathToken;
     

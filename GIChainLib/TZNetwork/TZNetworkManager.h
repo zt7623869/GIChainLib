@@ -22,7 +22,7 @@
 /** 请求任务队列 */
 @property (nonatomic,strong) NSMutableDictionary *taskQueue;
 /** 获取单例 */
-+ (TZNetworkManager*)sharedInstance;
++ (instancetype)sharedInstance;
 
 /**
  创建网络请求
