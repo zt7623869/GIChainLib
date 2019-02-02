@@ -13,7 +13,7 @@
 
 +(TZNetworkTask *)createRequestWithMethod:(NSString *)method url:(NSString *)url param:(NSDictionary *)paramDict cache:(BOOL)needCache delegate:(id<TZNetworkManagerProtocol>)delegate{
     
-    NSString *urlstring = [@"https://test.6x.com/app/api/" stringByAppendingPathComponent:url];
+    NSString *urlstring = [@"https://www.6xhtt.com/app/api/" stringByAppendingPathComponent:url];
     
     return [super createRequestWithMethod:method url:urlstring param:paramDict cache:needCache delegate:delegate];
 }
@@ -49,7 +49,9 @@
     return msg;
 }
 
-+ (id<TZNetworkResultProtocol>)parseRequestResult:(id)responseObject{
++ (id)parseResponse:(NSURLResponse *)response result:(id)responseObject error:(NSError *)error success:(inout BOOL*)success{
+    
+    *success = !error;
     
     return responseObject;
 }

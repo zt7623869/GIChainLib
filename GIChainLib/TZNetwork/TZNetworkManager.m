@@ -130,7 +130,7 @@ static TZNetworkManager *_defaultNetworkManager;
 
 + (TZNetworkTask *)createRequestWithMethod:(NSString *)method url:(NSString *)url param:(NSDictionary *)paramDict cache:(BOOL)needCache delegate:(id<TZNetworkManagerProtocol>)delegate{
     
-    AFHTTPSessionManager *sessionManager = [self sharedInstance].sessionManager;
+    AFHTTPSessionManager *sessionManager = ((TZNetworkManager *)[self sharedInstance]).sessionManager;
     ///配置cookie
     [sessionManager.requestSerializer setValue:[self requestCookies] forHTTPHeaderField:@"Cookie"];
     
@@ -171,9 +171,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //根据url从queue中取出task
 + (TZNetworkTask *)getTaskWithUrl:(NSString *)url{
     
-    for (NSString * key in [[self sharedInstance].taskQueue allKeys]) {
+    for (NSString * key in [((TZNetworkManager *)[self sharedInstance]).taskQueue allKeys]) {
         
-        TZNetworkTask * task = [[self sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask * task = [((TZNetworkManager *)[self sharedInstance]).taskQueue objectForKey:key];
         
         if ([task.requestUrl isEqual:url]) {
             
@@ -193,9 +193,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //根据url取消task
 + (void)cancelTaskWithUrl:(NSString *)url
 {
-    for (NSString *key in [[self sharedInstance].taskQueue allKeys]) {
+    for (NSString *key in [((TZNetworkManager *)[self sharedInstance]).taskQueue allKeys]) {
         
-        TZNetworkTask *task = [[self sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask *task = [((TZNetworkManager *)[self sharedInstance]).taskQueue objectForKey:key];
         
         if ([task.requestUrl isEqual:url]) {
             
@@ -207,9 +207,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //取消queue中所有的task
 + (void)cancelAllTaskInQueue
 {
-    for (NSString *key in [[self sharedInstance].taskQueue allKeys]) {
+    for (NSString *key in [((TZNetworkManager *)[self sharedInstance]).taskQueue allKeys]) {
         
-        TZNetworkTask *task = [[self sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask *task = [((TZNetworkManager *)[self sharedInstance]).taskQueue objectForKey:key];
         
         //如果需要一直保持的请求 需设置keepRequest
         if (!task.keepRequest) {
@@ -222,9 +222,9 @@ static TZNetworkManager *_defaultNetworkManager;
 //是否有未完成的任务
 + (BOOL)hasTaskRunning{
     
-    for (NSString *key in [[self sharedInstance].taskQueue allKeys]) {
+    for (NSString *key in [((TZNetworkManager *)[self sharedInstance]).taskQueue allKeys]) {
         
-        TZNetworkTask *task = [[self sharedInstance].taskQueue objectForKey:key];
+        TZNetworkTask *task = [((TZNetworkManager *)[self sharedInstance]).taskQueue objectForKey:key];
         
         if (task.state == NSURLSessionTaskStateRunning) {
             

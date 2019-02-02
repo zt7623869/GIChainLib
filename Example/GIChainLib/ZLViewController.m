@@ -27,11 +27,11 @@
 //    NSLog(@"x=%f,y=%f",x,y);
     
     
-//    [[ZLNetworkManager createRequestWithMethod:@"GET" url:@"index/indexValue" param:@{} cache:NO delegate:nil] success:^(id<TZNetworkResultProtocol> requestResult) {
-//
-//    } failure:^(id<TZNetworkResultProtocol> requestResult) {
-//
-//    }];
+    [[ZLNetworkManager createRequestWithMethod:@"GET" url:@"index/indexValue" param:@{} cache:NO delegate:nil] success:^(id<TZNetworkResultProtocol> requestResult) {
+        
+    } failure:^(id<TZNetworkResultProtocol> requestResult) {
+
+    }];
     
     
 }
