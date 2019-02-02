@@ -35,6 +35,19 @@
  */
 + (TZNetworkTask *)createRequestWithMethod:(NSString *)method url:(NSString *)url param:(NSDictionary *)paramDict cache:(BOOL)needCache delegate:(id<TZNetworkManagerProtocol>)delegate;
 
+
+/**
+ 创建网络请求
+ @param sessionManager AFHTTPSessionManager
+ @param method 请求方式 GET/POST
+ @param url 请求地址
+ @param paramDict 请求参数
+ @param needCache 是否需要缓存（预留，暂时无用）
+ @param delegate 代理
+ @return 返回请求任务对象
+ */
++ (TZNetworkTask *)createRequestWithManager:(AFHTTPSessionManager *)sessionManager method:(NSString *)method url:(NSString *)url param:(NSDictionary *)paramDict cache:(BOOL)needCache delegate:(id<TZNetworkManagerProtocol>)delegate;
+
 /**
  根据url从queue中取出task
  @param url 请求地址

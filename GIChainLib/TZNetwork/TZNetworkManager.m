@@ -127,10 +127,15 @@ static TZNetworkManager *_defaultNetworkManager;
     return cookieValue;
 }
 
-
 + (TZNetworkTask *)createRequestWithMethod:(NSString *)method url:(NSString *)url param:(NSDictionary *)paramDict cache:(BOOL)needCache delegate:(id<TZNetworkManagerProtocol>)delegate{
     
     AFHTTPSessionManager *sessionManager = ((TZNetworkManager *)[self sharedInstance]).sessionManager;
+    
+    return [self createRequestWithManager:sessionManager method:method url:url param:paramDict cache:needCache delegate:delegate];
+}
+
++ (TZNetworkTask *)createRequestWithManager:(AFHTTPSessionManager *)sessionManager method:(NSString *)method url:(NSString *)url param:(NSDictionary *)paramDict cache:(BOOL)needCache delegate:(id<TZNetworkManagerProtocol>)delegate{
+    
     ///配置cookie
     [sessionManager.requestSerializer setValue:[self requestCookies] forHTTPHeaderField:@"Cookie"];
     
